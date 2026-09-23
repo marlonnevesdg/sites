@@ -1,0 +1,4300 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projetos & Produtos — Offline</title>
+  <style>
+:root {
+  --bg: #0f1115; --panel:#151922; --muted:#8a93a6; --text:#e6e9ef; --brand:#6ea8fe; --card:#191f2a; --border:#232a38; --danger:#ff6b6b
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Arial;scrollbar-color:#2a3650 #0d1420;scrollbar-width:thin}
+body::-webkit-scrollbar{width:10px;height:10px}
+body::-webkit-scrollbar-track{background:#0d1420}
+body::-webkit-scrollbar-thumb{background:#2a3650;border-radius:999px;border:2px solid #0d1420}
+body::-webkit-scrollbar-thumb:hover{background:#3a4c6f}
+header{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:5}
+.title{font-weight:800}
+.spacer{flex:1}
+.btn{appearance:none;border:1px solid var(--border);background:#121722;color:var(--text);padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:600}
+.btn:hover{background-color:#202b41;}
+.btn.brand{background:var(--brand);color:#0b1220;border-color:transparent}
+.icon-btn{background:transparent;border:0;cursor:pointer;display:grid;place-items:center;width:36px;height:36px;border-radius:10px;color:var(--text);stroke-width:1.5;opacity:0.6;}
+.icon-btn:hover{background:#202b41;color:var(--brand);stroke-width:1.5;}
+.layout{display:grid;grid-template-columns:280px 1fr;min-height:calc(100% - 56px);transition:grid-template-columns .18s ease}
+.layout.aside-oculta{grid-template-columns:0 1fr}
+.layout.aside-oculta aside{overflow:hidden;border-right:0}
+#btnToggleSidebar.ativo{background:#202b41;color:var(--brand)}
+aside{border-right:1px solid var(--border);background:#0f141f;min-width:0}
+.aside-head{padding:10px 12px;color:var(--muted);font-weight:800;border-bottom:1px solid var(--border)}
+.project-list{list-style:none;margin:0;padding:0}
+.project-list li{display:flex;gap:10px;align-items:center;padding:10px 12px;border-bottom:1px dashed #1e2634;cursor:pointer}
+.project-list li:hover{background:#0e1420}
+.pcover{width:28px;height:20px;background:#0b0f16;border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.pcover img{width:100%;height:100%;object-fit:cover}
+.pname{font-weight:700}
+.ptotal{margin-left:auto;color:var(--muted);font-size:12px}
+
+h2 {
+  padding: 0px;
+  margin: 10px 0px 15px 0px;
+}
+
+main{padding:16px}
+.hidden{display:none!important}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
+.badge{padding:4px 8px;border-radius:8px;background:#152235;border:1px solid #263147;font-weight:700;font-size:12px}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 16px;
+  grid-auto-rows: 1fr;        /* força cada célula ter a mesma altura */
+  align-items: stretch;       /* garante que os cards estiquem */
+}
+.cards > .card { height: 100%; } /* o card ocupa 100% da célula */    
+.thumb{aspect-ratio:16/9;background:#0b0f16;overflow:hidden;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.thumb img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;}
+img:not([src]){background:linear-gradient(100deg,#161c27 30%,#1d2532 50%,#161c27 70%);background-size:200% 100%;animation:imgshine 1.1s linear infinite}
+@keyframes imgshine{to{background-position:-200% 0}}
+.img-missing{background:#161c27;animation:none}
+.muted{color:var(--muted)}
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column; /* importante! organiza verticalmente */
+}
+.card .content {
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  justify-content: space-between;
+  flex: 1; /* garante que o conteúdo ocupa o espaço restante */
+}
+.card .content .row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: auto; /* isso fixa o row no fundo do card */
+}
+
+/* Products grid */
+/* Produtos usam o MESMO grid dos projetos */
+.cards.products { 
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  grid-auto-rows: 1fr;
+  align-items: stretch;
+}
+
+/* Cartões de produto ocupam a célula toda e fixam o rodapé */
+.cards.products .product {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.product .pic { aspect-ratio: 1 / 1; overflow: hidden; }
+.product .info { display: flex; flex-direction: column; flex: 1; }
+.product .info .row {
+  margin-top: auto; 
+  display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;
+}
+
+/* Evita sobreposição de texto/ícones */
+.info h4 { 
+  margin: 0 0 6px; font-size: 17px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; 
+}
+.product .icons { display: flex; gap: 8px; flex-wrap: nowrap; }
+.product .icons .icon-mini { flex: 0 0 auto; }
+
+
+.product{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.product .pic{aspect-ratio:1/1;background:#0b0f16;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.product .pic img{width:100%;height:100%;object-fit:cover}
+.info{padding:10px}
+.info h4{margin:0 0 6px;font-size:17px}
+
+.proj-link{font-size:12px;color:var(--muted);text-decoration:none;font-weight:800;opacity:0.5;}
+.proj-link:hover{text-decoration:underline}
+.row{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.price{font-weight:700;font-size:23px;}
+.price small{font-size:.8em;opacity:.65;margin-right:2px}
+.icons{display:flex;gap:8px}
+.icon-mini{width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:transparent;display:grid;place-items:center;cursor:pointer;color:var(--text);stroke-width:1.5;}
+.icon-mini:hover{background:#0f1622}
+
+input[type="text"],input[type="number"],input[type="url"],textarea{width:100%;background:#0d1420;border:1px solid #263147;color:var(--text);padding:10px 12px;border-radius:10px;outline:none}
+textarea{min-height:90px;resize:vertical}
+label{display:block;font-weight:700;font-size:12px;color:var(--muted);margin:7px 0px 6px 0px}
+.grid-form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid-form-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+
+dialog{border:1px solid var(--border);border-radius:14px;padding:0;background:var(--panel);color:var(--text);width:min(980px,92vw);max-height:90vh;overflow:hidden}
+dialog::backdrop{background:rgba(4,6,12,.6)}
+.modal-head{padding:12px 14px;border-bottom:1px solid var(--border);font-weight:800;display:flex;align-items:center;justify-content:space-between}
+.modal-body{padding:14px;max-height:calc(90vh - 122px);overflow:auto;scrollbar-color:#2a3650 #0d1420;scrollbar-width:thin}
+.modal-body::-webkit-scrollbar{width:10px;height:10px}
+.modal-body::-webkit-scrollbar-track{background:#0d1420}
+.modal-body::-webkit-scrollbar-thumb{background:#2a3650;border-radius:999px;border:2px solid #0d1420}
+.modal-body::-webkit-scrollbar-thumb:hover{background:#3a4c6f}
+.modal-foot{padding:12px 14px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px}
+  
+
+/* Aparência do select de Projeto */
+select#prodProject {
+  width: 100%;
+  background: #0d1420;
+  border: 1px solid #263147;
+  color: var(--text);
+  padding: 10px 12px;
+  border-radius: 10px;
+  outline: none;
+  font-size: 14px;
+  cursor: pointer;
+  appearance: none;
+  height: 47px;
+}
+
+/* setinha discreta */
+select#prodProject::-ms-expand {
+  display: none;
+}
+
+/* hover/focus */
+select#prodProject:hover {
+  border-color: var(--brand);
+}
+select#prodProject:focus {
+  box-shadow: 0 0 0 2px rgba(110,168,254,0.2);
+  border-color: var(--brand);
+}
+
+/* 🔹 Campo file de imagem no mesmo estilo */
+input[type="file"]#prodImage {
+  width: 100%;
+  background: #0d1420;
+  border: 1px solid #263147;
+  color: var(--muted);
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* melhora contraste do texto "Nenhum arquivo escolhido" */
+input[type="file"]#prodImage::file-selector-button {
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid #263147;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+input[type="file"]#prodImage::file-selector-button:hover {
+  background: #202b41;
+  color: var(--brand);
+}
+
+input[type="file"]#projCover {
+  width: 100%;
+  background: #0d1420;
+  border: 1px solid #263147;
+  color: var(--muted);
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+input[type="file"]#projCover::file-selector-button {
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid #263147;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+input[type="file"]#projCover::file-selector-button:hover {
+  background: #202b41;
+  color: var(--brand);
+}
+
+.product-editor-top{display:grid;grid-template-columns:minmax(280px,340px) 1fr;gap:16px;align-items:start;margin-bottom:12px}
+.product-editor-side{display:grid;gap:12px}
+.editor-main-preview{aspect-ratio:1/1;min-height:unset;background:#0b0f16;border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.editor-main-preview img{width:100%;height:100%;object-fit:cover;display:block}
+.editor-gallery{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:8px}
+.editor-gallery .gallery-item{aspect-ratio:1/1;background:#0b0f16;border:1px solid var(--border);border-radius:10px;overflow:hidden;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;padding:6px;text-align:center}
+
+.sortable-placeholder{border:2px dashed var(--brand)!important;border-radius:12px;background:rgba(110,168,254,0.08)!important;min-height:120px}
+.project-list .sortable-placeholder{min-height:48px;margin:4px 8px;list-style:none}
+.cards .sortable-placeholder,.cards.products .sortable-placeholder{height:100%}
+.sortable-dragging{opacity:.35}
+
+@media (max-width: 860px){
+  .product-editor-top{grid-template-columns:1fr}
+  .editor-gallery{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+
+/* Descrição no card do produto */
+.desc {
+  margin: 4px 0 8px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+
+.sortable-ghost{opacity:.45}
+.sortable-dragging{outline:1px dashed var(--brand);outline-offset:3px}
+.drag-handle{cursor:grab;user-select:none;font-size:16px;opacity:.55;padding:2px 6px;border-radius:8px;border:1px dashed transparent}
+.drag-handle:hover{opacity:1;border-color:#2e3c56}
+.project-list li.drag-over,.product.drag-over,.card.drag-over{outline:2px dashed var(--brand);outline-offset:-6px}
+.editor-gallery .gallery-item img{width:100%;height:100%;object-fit:cover;display:block}
+.product .pic,.thumb{position:relative}
+.carousel-arrow{position:absolute;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:rgba(5,8,14,.72);color:#fff;display:grid;place-items:center;cursor:pointer;z-index:2}
+.carousel-arrow:hover{background:rgba(20,28,44,.95)}
+.carousel-arrow.prev{left:8px}
+.carousel-arrow.next{right:8px}
+.save-hint{font-size:12px;color:var(--muted)}
+select{width:100%;background:#0d1420;border:1px solid #263147;color:var(--text);padding:10px 12px;border-radius:10px;outline:none;font-size:14px;cursor:pointer;appearance:none;height:47px}
+select:hover{border-color:var(--brand)}
+select:focus{box-shadow:0 0 0 2px rgba(110,168,254,0.2);border-color:var(--brand)}
+
+/* ---- tela de carregamento / erro ---- */
+.loader{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:rgba(9,11,15,.88);backdrop-filter:blur(3px)}
+.loader[hidden]{display:none}
+.loader-box{width:min(460px,90vw);background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:22px 24px;box-shadow:0 18px 50px rgba(0,0,0,.55);text-align:center}
+.loader-title{font-weight:800;font-size:17px;margin-bottom:6px}
+.loader-msg{color:var(--muted);font-size:13px;min-height:18px}
+.loader-bar{margin:16px 0 8px;height:8px;border-radius:999px;background:#0d1420;overflow:hidden;position:relative}
+.loader-fill{height:100%;width:0%;border-radius:999px;background:var(--brand);transition:width .18s ease}
+.loader-bar.indeterminate .loader-fill{width:35%;animation:loaderslide 1.1s ease-in-out infinite}
+@keyframes loaderslide{0%{margin-left:-35%}100%{margin-left:100%}}
+.loader-count{color:var(--muted);font-size:12px;min-height:16px;font-variant-numeric:tabular-nums}
+.loader-error{margin-top:14px;text-align:left;font-size:13px;line-height:1.5;color:#ffb4bf;background:#2a151a;border:1px solid #51222a;border-radius:10px;padding:12px 14px}
+.loader-error[hidden]{display:none}
+.loader-error b{color:#ffd9de}
+.loader-error code{background:#1b1016;padding:1px 5px;border-radius:5px;color:#ffd9de;font-size:12px}
+.loader-error ol{margin:8px 0 0;padding-left:20px}
+.loader-error li{margin:4px 0}
+#loaderClose{margin-top:14px}
+#loaderClose[hidden]{display:none}
+
+/* ---- galeria do produto ---- */
+#modalProduct .modal-body{min-height:min(68vh,640px)}
+.galeria-bloco{margin-top:16px;border-top:1px solid var(--border);padding-top:14px}
+.galeria-cabecalho{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.galeria-contador{font-size:12px;color:var(--muted)}
+.galeria-acoes{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:10px 0}
+.galeria-acoes input[type="file"]{flex:1;min-width:220px}
+.galeria-avancado{margin-top:12px}
+.galeria-avancado summary{cursor:pointer;color:var(--muted);font-size:12px;user-select:none}
+.galeria-avancado summary:hover{color:var(--text)}
+.galeria-avancado textarea{margin-top:8px}
+.galeria-avancado .btn{margin-top:8px}
+.editor-gallery{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}
+.editor-gallery .gallery-item{position:relative}
+.gallery-item .remover{position:absolute;top:5px;right:5px;width:24px;height:24px;border-radius:50%;border:0;cursor:pointer;background:rgba(12,16,24,.82);color:#ff9aa9;font-size:15px;line-height:1;display:grid;place-items:center;opacity:0;transition:opacity .12s}
+.gallery-item:hover .remover{opacity:1}
+.gallery-item .remover:hover{background:#51222a;color:#fff}
+.gallery-item .ordem{position:absolute;bottom:5px;left:5px;font-size:10px;font-weight:700;padding:2px 6px;border-radius:999px;background:rgba(12,16,24,.82);color:var(--muted)}
+.galeria-vazia{grid-column:1/-1;color:var(--muted);font-size:13px;padding:18px;text-align:center;border:1px dashed var(--border);border-radius:10px}
+
+/* ============ editor: imagem principal com lixeira / area de upload ============ */
+.editor-main-preview{position:relative}
+.editor-main-preview .apagar-foto{position:absolute;top:8px;right:8px;width:32px;height:32px;border-radius:9px;border:1px solid #51222a;background:rgba(12,16,24,.85);color:#ff9aa9;cursor:pointer;display:grid;place-items:center;opacity:0;transition:opacity .12s}
+.editor-main-preview:hover .apagar-foto{opacity:1}
+.editor-main-preview .apagar-foto:hover{background:#51222a;color:#fff}
+.zona-upload{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:18px;text-align:center;width:100%;height:100%}
+.zona-upload .dica{font-size:12px;color:var(--muted);line-height:1.5}
+.zona-upload input[type="text"]{max-width:230px;font-size:12px;padding:7px 9px}
+.zona-upload-erro{font-size:12px;color:var(--danger);line-height:1.4;max-width:260px}
+
+/* ============ pagina do produto (sobe de baixo) ============ */
+.ficha{position:fixed;inset:0;z-index:60;display:block}
+.ficha[hidden]{display:none}
+.ficha-fundo{position:absolute;inset:0;background:rgba(4,6,12,.66);opacity:0;transition:opacity .28s ease}
+.ficha.aberta .ficha-fundo{opacity:1}
+.ficha-painel{position:absolute;left:0;right:0;bottom:0;height:min(88vh,900px);background:var(--panel);border-top:1px solid var(--border);border-radius:18px 18px 0 0;box-shadow:0 -18px 60px rgba(0,0,0,.55);transform:translateY(100%);transition:transform .32s cubic-bezier(.22,.61,.36,1);display:flex;flex-direction:column;overflow:hidden}
+.ficha.aberta .ficha-painel{transform:translateY(0)}
+.ficha-puxador{width:44px;height:4px;border-radius:999px;background:#2a3650;margin:10px auto 0;flex:none}
+.ficha-fechar{position:absolute;top:12px;right:14px;width:34px;height:34px;border-radius:9px;border:1px solid var(--border);background:#121722;color:var(--text);cursor:pointer;font-size:15px;line-height:1;display:grid;place-items:center;z-index:2}
+.ficha-fechar:hover{background:#202b41}
+.ficha-corpo{padding:18px 26px 26px;overflow:auto;scrollbar-color:#2a3650 #0d1420;scrollbar-width:thin}
+.ficha-corpo::-webkit-scrollbar{width:10px}
+.ficha-corpo::-webkit-scrollbar-track{background:#0d1420}
+.ficha-corpo::-webkit-scrollbar-thumb{background:#2a3650;border-radius:999px;border:2px solid #0d1420}
+
+.ficha-topo{display:grid;grid-template-columns:minmax(260px,380px) 1fr;gap:26px;align-items:start}
+.ficha-foto{aspect-ratio:1/1;background:#0b0f16;border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;cursor:zoom-in}
+.ficha-foto img{width:100%;height:100%;object-fit:cover;display:block}
+.ficha-info h2{margin:2px 0 6px;font-size:23px;line-height:1.25}
+.ficha-projeto{font-size:12px;font-weight:700;color:var(--brand);cursor:pointer;display:inline-block;margin-bottom:12px}
+.ficha-projeto:hover{text-decoration:underline}
+.ficha-preco{font-size:30px;font-weight:800;letter-spacing:-.01em}
+.ficha-preco small{font-size:15px;color:var(--muted);margin-right:5px;font-weight:700}
+.ficha-etiquetas{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}
+.ficha-etiqueta{font-size:11px;font-weight:700;padding:5px 10px;border-radius:999px;background:#16202e;color:#8fb4e8;border:1px solid #24354d}
+.ficha-desc{color:var(--muted);line-height:1.6;margin:16px 0 0;white-space:pre-wrap}
+.ficha-acoes{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+
+.ficha-galeria-bloco{margin-top:28px;border-top:1px solid var(--border);padding-top:18px}
+.ficha-galeria-bloco[hidden]{display:none}
+.ficha-galeria-titulo{font-weight:800;font-size:13px;margin-bottom:12px}
+.ficha-galeria-titulo span{color:var(--muted);font-weight:600}
+.ficha-galeria{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:12px}
+.ficha-galeria .miniatura{aspect-ratio:1/1;background:#0b0f16;border:1px solid var(--border);border-radius:11px;overflow:hidden;cursor:zoom-in;position:relative;transition:border-color .15s,transform .15s}
+.ficha-galeria .miniatura:hover{border-color:var(--brand);transform:translateY(-2px)}
+.ficha-galeria .miniatura img{width:100%;height:100%;object-fit:cover;display:block}
+
+@media (max-width:860px){
+  .ficha-topo{grid-template-columns:1fr}
+  .ficha-corpo{padding:16px 16px 22px}
+}
+
+/* ============ visor em tela cheia ============ */
+.visor{position:fixed;inset:0;z-index:80;background:rgba(4,6,12,.95);display:grid;grid-template-columns:auto 1fr auto;align-items:center;opacity:0;transition:opacity .2s ease}
+.visor[hidden]{display:none}
+.visor.aberto{opacity:1}
+.visor-palco{width:100%;height:100vh;display:flex;align-items:center;justify-content:center;padding:60px 10px}
+.visor-palco img{max-width:100%;max-height:100%;object-fit:contain;display:block;border-radius:6px}
+.visor-seta{width:58px;height:58px;margin:0 14px;border-radius:50%;border:1px solid var(--border);background:rgba(21,25,34,.9);color:var(--text);font-size:30px;line-height:1;cursor:pointer;display:grid;place-items:center;transition:background .15s}
+.visor-seta:hover{background:#202b41;color:var(--brand)}
+.visor-seta[hidden]{visibility:hidden;display:grid}
+.visor-fechar{position:absolute;top:18px;right:22px;width:40px;height:40px;border-radius:10px;border:1px solid var(--border);background:rgba(21,25,34,.9);color:var(--text);font-size:17px;cursor:pointer;display:grid;place-items:center;z-index:2}
+.visor-fechar:hover{background:#202b41}
+.visor-contador{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);font-size:12px;font-weight:700;color:var(--muted);background:rgba(21,25,34,.9);border:1px solid var(--border);padding:6px 14px;border-radius:999px;font-variant-numeric:tabular-nums}
+
+/* produto: partes clicaveis abrem a ficha */
+.product .pic,.product h4,.product .desc{cursor:pointer}
+.product h4:hover,.product .desc:hover{color:var(--brand)}
+
+/* ---- padroniza a altura e a tipografia dos campos ----
+   selects ja usavam 47px; os inputs ficavam ~41px e a linha desalinhava */
+input[type="text"],
+input[type="number"],
+input[type="url"],
+input[type="search"],
+input[type="date"],
+select{
+  height:47px;
+  font-size:14px;
+  font-family:inherit;
+  line-height:normal;
+}
+textarea{font-size:14px;font-family:inherit;padding:12px;height:auto}
+input[type="text"]:hover,input[type="number"]:hover,input[type="url"]:hover{border-color:var(--brand)}
+input[type="text"]:focus,input[type="number"]:focus,input[type="url"]:focus,textarea:focus{
+  box-shadow:0 0 0 2px rgba(110,168,254,.2);border-color:var(--brand)
+}
+/* a zona de upload usa campo menor de proposito */
+.zona-upload input[type="text"]{height:38px;font-size:12px;padding:7px 9px}
+/* busca no topo das listas mantem o tamanho compacto */
+.toolbar input[type="text"]{height:42px}
+
+/* ---- botao: sem sublinhado quando e link ---- */
+.btn,a.btn{text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px;line-height:1}
+a.btn:hover{text-decoration:none}
+
+/* ============ card do produto: só a imagem; o resto surge no hover ============ */
+.product{position:relative;background:#0b0f16;border:1px solid var(--border);border-radius:12px;overflow:hidden;aspect-ratio:1/1;cursor:pointer}
+.product .pic{position:absolute;inset:0;aspect-ratio:auto;height:100%;width:100%;background:#0b0f16;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px}
+.product .pic img{width:100%;height:100%;object-fit:cover;display:block}
+
+.product .sobre{
+  position:absolute;left:0;right:0;bottom:0;padding:44px 12px 12px;
+  background:linear-gradient(to top,rgba(6,9,15,.94) 0%,rgba(6,9,15,.85) 45%,rgba(6,9,15,0) 100%);
+  opacity:0;transform:translateY(8px);transition:opacity .16s ease,transform .16s ease;
+}
+.product:hover .sobre,.product:focus-within .sobre{opacity:1;transform:translateY(0)}
+.product .sobre h4{margin:0 0 8px;font-size:13px;line-height:1.3;color:#fff;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.product .sobre .linha{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.product .sobre .price{font-size:16px;font-weight:800;color:#fff;white-space:nowrap}
+.product .sobre .price small{font-size:11px;color:#9fb4d4;margin-right:3px;font-weight:700}
+.product .sobre .icons{display:flex;gap:6px;flex:0 0 auto}
+.product .sobre .icon-mini{width:28px;height:28px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);color:#fff}
+.product .sobre .icon-mini:hover{background:rgba(255,255,255,.22)}
+
+/* borda de destaque ao passar o mouse */
+.product:hover{border-color:var(--brand)}
+
+/* a grade nao precisa mais esticar os cards */
+.cards.products .product{height:auto}
+
+/* ============ imagens de produto sempre quadradas ============ */
+.ficha-foto,.editor-main-preview,.ficha-galeria .miniatura,.editor-gallery .gallery-item{aspect-ratio:1/1}
+.ficha-foto img,.editor-main-preview img{width:100%;height:100%;object-fit:cover}
+
+/* a foto da pagina do produto nao ocupa a coluna inteira */
+.ficha-foto{width:80%;margin:0 auto}
+@media (max-width:860px){ .ficha-foto{width:100%} }
+
+/* ============ alternador grade / lista ============ */
+.alternador{display:flex;gap:2px;background:#0d1420;border:1px solid #263147;border-radius:10px;padding:3px;flex:0 0 auto}
+.alt-btn{width:32px;height:30px;border:0;border-radius:7px;background:transparent;color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:background .15s,color .15s}
+.alt-btn:hover{color:var(--text);background:#18202e}
+.alt-btn.ativo{background:var(--brand);color:#0b1220}
+
+/* a frequência só aparece no modo lista */
+.product .freq{display:none}
+
+/* ============ modo lista: base ============ */
+.cards.products.lista{display:flex;flex-direction:column}
+.cards.products.lista .product{
+  aspect-ratio:auto;height:auto;display:grid;align-items:center;
+  background:var(--card);
+}
+.cards.products.lista .product:hover{background:#1b2330;border-color:var(--border)}
+.cards.products.lista .pic{position:static;overflow:hidden;flex:0 0 auto;font-size:9px}
+.cards.products.lista .sobre{opacity:1;transform:none;padding:0;background:none;position:static}
+.cards.products.lista .icons{opacity:.65;transition:opacity .15s}
+.cards.products.lista .product:hover .icons{opacity:1}
+.cards.products.lista .icon-mini{background:#121722;border:1px solid var(--border);color:var(--text)}
+.cards.products.lista .icon-mini:hover{background:#202b41;color:var(--brand)}
+.cards.products.lista .price small{color:var(--muted)}
+
+/* ============ modo lista, versão em colunas alinhadas ============
+   display:contents achata .sobre e .linha, então miniatura, nome,
+   frequência, valor e ícones viram colunas da mesma grade e ficam
+   alinhados entre todas as linhas. */
+.cards.products.lista{gap:4px}
+
+.cards.products.lista .product{
+  /* ultima coluna fixa: linhas com e sem o icone de link ficam alinhadas */
+  grid-template-columns:38px minmax(0,1fr) 148px 118px 124px;
+  gap:14px;padding:6px 12px;border-radius:8px;
+}
+.cards.products.lista .sobre,
+.cards.products.lista .linha{display:contents}
+
+.cards.products.lista .pic{width:38px;height:38px;border-radius:6px}
+
+.cards.products.lista .sobre h4{
+  font-size:13.5px;margin:0;min-width:0;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.cards.products.lista .freq{
+  display:block;margin:0;font-size:11px;color:var(--muted);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.cards.products.lista .price{
+  font-size:14px;text-align:right;justify-self:end;
+}
+.cards.products.lista .icons{gap:4px;justify-self:end}
+.cards.products.lista .icon-mini{width:27px;height:27px}
+
+.cards.products.lista .sortable-placeholder{height:52px;min-height:52px}
+
+@media (max-width:760px){
+  .cards.products.lista .product{grid-template-columns:38px minmax(0,1fr) auto;gap:10px}
+  .cards.products.lista .freq{grid-column:2;grid-row:2;font-size:10px}
+  .cards.products.lista .price{grid-column:3;grid-row:1}
+  .cards.products.lista .icons{grid-column:3;grid-row:2;justify-self:end}
+}
+
+/* ============ ficha compacta ============ */
+.ficha-painel{height:auto;max-height:90vh;border-radius:16px 16px 0 0}
+.ficha-corpo{padding:14px 26px 24px}
+.ficha-topo{grid-template-columns:300px minmax(0,1fr);gap:28px;align-items:start}
+.ficha-info h2{font-size:21px;margin:0 0 5px}
+.ficha-preco{font-size:27px}
+.ficha-desc{margin:13px 0 0;font-size:13.5px;line-height:1.55}
+.ficha-acoes{margin-top:16px}
+.ficha-etiquetas{margin-top:11px}
+
+/* ---- pilha de imagens ---- */
+.ficha-visual{display:flex;flex-direction:column;align-items:center;gap:8px}
+.deck{
+  position:relative;width:100%;aspect-ratio:1/1;
+  /* espaço para as cartelas que sobram por baixo */
+  margin-bottom:calc(3 * 15px);
+  user-select:none;
+}
+.deck.varias{cursor:pointer}
+.deck .carta{
+  position:absolute;inset:0;border-radius:12px;overflow:hidden;
+  background:#0b0f16;border:1px solid var(--border);
+  transform-origin:50% 0%;
+  transition:transform .34s cubic-bezier(.22,.61,.36,1),opacity .26s ease,filter .3s ease;
+  will-change:transform;
+}
+.deck .carta img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.deck-vazio{
+  position:absolute;inset:0;display:grid;place-items:center;
+  background:#0b0f16;border:1px solid var(--border);border-radius:12px;
+  color:var(--muted);font-size:13px;
+}
+.deck-contador{
+  font-size:11px;font-weight:700;color:var(--muted);
+  font-variant-numeric:tabular-nums;letter-spacing:.03em;min-height:14px;
+}
+
+@media (max-width:860px){
+  .ficha-topo{grid-template-columns:1fr;gap:18px}
+  .deck{max-width:320px;margin-left:auto;margin-right:auto}
+  .ficha-corpo{padding:12px 16px 20px}
+}
+
+/* ============ pilha: só a da frente mostra a foto ============
+   as de baixo aparecem como ressaltos de cor, tiradas da própria
+   imagem de cada uma, sem borda */
+.deck .carta{border:0;background:#1b2330;transition:transform .34s cubic-bezier(.22,.61,.36,1),opacity .26s ease,filter .3s ease,background .34s ease}
+.deck .carta img{opacity:0;transition:opacity .22s ease}
+.deck .carta.frente{border:1px solid var(--border)}
+.deck .carta.frente img{opacity:1}
+
+/* ============ ações da ficha em ícones ============ */
+.ficha-acoes{gap:8px}
+.acao-icone{
+  width:38px;height:38px;border-radius:10px;cursor:pointer;
+  display:grid;place-items:center;text-decoration:none;
+  background:#121722;border:1px solid var(--border);color:var(--text);
+  transition:background .15s,color .15s,border-color .15s,opacity .15s;
+}
+.acao-icone:hover{background:#202b41;color:var(--brand);border-color:#2c3a54}
+.acao-icone.discreto{opacity:.45;background:transparent;color:var(--muted)}
+.acao-icone.discreto:hover{opacity:1;background:#181f2b;color:var(--text);border-color:var(--border)}
+
+/* ============ barra lateral: só capa e nome ============ */
+.ptotal{display:none}
+.pname{margin-right:auto}
+
+/* ============ ficha: caixa estreita e centralizada ============
+   continua entrando de baixo para cima, mas agora como um cartão
+   no meio da tela, sobre um fundo desfocado */
+.ficha-fundo{
+  background:rgba(4,6,12,.55);
+  backdrop-filter:blur(9px) saturate(.9);
+  -webkit-backdrop-filter:blur(9px) saturate(.9);
+}
+
+.ficha-painel{
+  /* inset + margin:auto centraliza dentro do próprio .ficha, que ocupa a
+     área visível sem a barra de rolagem — assim não sobra viés de um lado */
+  inset:0;margin:auto;
+  width:min(820px,94vw);
+  height:fit-content;max-height:88vh;
+  border:1px solid var(--border);
+  border-radius:16px;
+  box-shadow:0 24px 70px rgba(0,0,0,.6);
+  transform:translateY(26px) scale(.985);
+  opacity:0;
+  transition:transform .34s cubic-bezier(.22,.61,.36,1),opacity .24s ease;
+}
+.ficha.aberta .ficha-painel{
+  transform:none;
+  opacity:1;
+}
+
+/* o puxador fazia sentido na folha colada embaixo; num cartão centralizado, não */
+.ficha-puxador{display:none}
+.ficha-fechar{top:10px;right:12px}
+.ficha-corpo{padding:22px 24px 22px}
+
+/* ============ pilha ancorada pela base, transbordando por cima ============
+   a última cartela encosta no rodapé do texto; o topo sobe conforme
+   entram mais imagens, e passa por cima da borda do cartão */
+.ficha-painel{overflow:visible}
+.ficha-corpo{overflow:visible}
+.ficha-topo{align-items:end}
+
+.ficha-visual{
+  position:relative;align-self:stretch;
+  min-height:210px;display:block;
+}
+.deck{
+  position:absolute;left:0;right:0;bottom:0;   /* o 'bottom' exato vem do JS */
+  width:auto;aspect-ratio:1/1;margin:0;
+}
+.deck-contador{display:none}
+
+/* a descrição não pode esticar o cartão sem limite */
+.ficha-desc{
+  display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;
+}
+
+/* os cantos arredondados do cartão não devem cortar a pilha */
+.ficha-painel{border-radius:16px}
+.ficha-corpo{border-radius:0 0 16px 16px}
+
+@media (max-width:860px){
+  .ficha-topo{align-items:start}
+  .ficha-visual{align-self:auto;min-height:0;max-width:300px;margin:0 auto}
+  .deck{position:relative;left:auto;right:auto;bottom:auto !important;margin-bottom:60px}
+  .ficha-painel,.ficha-corpo{overflow:hidden}
+}
+
+/* ============ ressaltos no tom do app ============
+   claro, com transparência fraca, sobre o fundo escuro do cartão.
+   A opacidade que o JS aplica por posição vai clareando menos a cada
+   degrau, então a pilha some suavemente. */
+.deck .carta{background:rgba(230,233,239,.13)}
+.deck .carta.frente{background:#0b0f16}
+/* um fio de luz no topo de cada ressalto, para separar um do outro */
+.deck .carta:not(.frente){box-shadow:inset 0 1px 0 rgba(255,255,255,.10)}
+
+/* ============ setas de produto, fora do cartão ============
+   a largura fica numa variável para o cartão e as setas usarem a mesma
+   referência e continuarem alinhados */
+.ficha{--ficha-w:min(820px,94vw)}
+.ficha-painel{width:var(--ficha-w)}
+
+.ficha-seta{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:46px;height:46px;border-radius:50%;
+  border:1px solid var(--border);background:rgba(21,25,34,.92);color:var(--text);
+  font-size:26px;line-height:1;cursor:pointer;
+  display:grid;place-items:center;
+  transition:background .15s,color .15s,border-color .15s;
+}
+.ficha-seta:hover{background:#202b41;color:var(--brand);border-color:#2c3a54}
+.ficha-seta[hidden]{display:none}
+.ficha-seta.esq{right:calc(50% + var(--ficha-w) / 2 + 16px)}
+.ficha-seta.dir{left:calc(50% + var(--ficha-w) / 2 + 16px)}
+
+/* sem espaço de sobra ao lado: as setas atrapalhariam, fica só o teclado */
+@media (max-width:980px){
+  .ficha-seta{display:none}
+}
+
+/* ============ projeto selecionado na barra lateral ============ */
+.project-list li.ativo{
+  background:#16202e;
+  box-shadow:inset 3px 0 0 var(--brand);
+}
+.project-list li.ativo .pname{color:var(--brand);font-weight:800}
+
+/* ============ barra da tela inicial ============ */
+.barra-inicial input[type="text"]{max-width:340px;flex:0 1 340px}
+.total-geral{
+  display:flex;align-items:baseline;gap:9px;
+  padding:7px 16px;border-radius:12px;
+  background:linear-gradient(180deg,#172130,#131a26);
+  border:1px solid #24354d;
+  white-space:nowrap;
+}
+.total-geral .rotulo{
+  font-size:10.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
+}
+.total-geral .valor{
+  font-size:19px;font-weight:800;color:var(--text);letter-spacing:-.01em;
+  font-variant-numeric:tabular-nums;
+}
+
+/* ============ aviso ao trocar de projeto pela rolagem ============ */
+.aviso-projeto{
+  position:fixed;left:50%;bottom:26px;transform:translate(-50%,14px);
+  background:rgba(21,25,34,.96);border:1px solid var(--border);
+  color:var(--text);font-weight:700;font-size:13px;
+  padding:9px 18px;border-radius:999px;
+  box-shadow:0 10px 30px rgba(0,0,0,.45);
+  opacity:0;pointer-events:none;z-index:70;
+  transition:opacity .2s ease,transform .2s ease;
+}
+.aviso-projeto.visivel{opacity:1;transform:translate(-50%,0)}
+
+/* ============ cabeçalho do modal com duas ações ============ */
+.modal-head-acoes{display:flex;gap:8px;align-items:center}
+
+/* ============ produtos arquivados no editor de projeto ============ */
+.arquivados{margin-top:18px;border-top:1px solid var(--border);padding-top:14px}
+.arquivados[hidden]{display:none}
+.arquivados-titulo{font-weight:800;font-size:13px;margin-bottom:10px}
+.arquivados-titulo span{color:var(--muted);font-weight:600}
+.arquivados-lista{display:flex;flex-direction:column;gap:6px}
+.arquivado{
+  display:grid;grid-template-columns:34px minmax(0,1fr) 110px auto;
+  align-items:center;gap:12px;
+  padding:6px 10px;border-radius:8px;background:#121722;
+}
+.arquivado-foto{width:34px;height:34px;border-radius:6px;overflow:hidden;background:#0b0f16}
+.arquivado-foto img{width:100%;height:100%;object-fit:cover;display:block}
+.arquivado-nome{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--muted)}
+.arquivado-preco{font-size:13px;text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
+.arquivado .btn{padding:6px 10px;font-size:12px}
+
+/* ============ card: ícones abaixo do valor ============
+   valores grandes empurravam os ícones para fora da miniatura */
+.product .sobre .linha{
+  display:flex;flex-direction:column;align-items:flex-start;gap:8px;
+}
+.product .sobre .price{font-size:17px}
+.product .sobre .icons{align-self:flex-start}
+
+/* ============ overscroll elástico entre projetos ============ */
+/* o conteúdo não é mais deslocado durante a puxada */
+
+
+
+/* ============ rolagem independente por coluna ============
+   Antes a página inteira rolava, então a lista de projetos e a área de
+   produtos andavam juntas e o efeito elástico mexia nas duas. Agora o
+   corpo não rola: o layout ocupa a altura da janela e cada coluna tem a
+   sua própria rolagem. */
+html,body{height:100%;overflow:hidden}
+
+.layout{
+  height:calc(100vh - 57px);   /* 57px é a altura do cabeçalho */
+  min-height:0;
+  overflow:hidden;
+}
+
+aside{
+  overflow-y:auto;overflow-x:hidden;min-height:0;
+  scrollbar-color:#2a3650 #0d1420;scrollbar-width:thin;
+}
+aside::-webkit-scrollbar{width:9px}
+aside::-webkit-scrollbar-track{background:#0d1420}
+aside::-webkit-scrollbar-thumb{background:#2a3650;border-radius:999px;border:2px solid #0d1420}
+aside::-webkit-scrollbar-thumb:hover{background:#3a4c6f}
+
+main{
+  overflow-y:auto;overflow-x:hidden;min-height:0;
+  scrollbar-color:#2a3650 #0d1420;scrollbar-width:thin;
+  /* a rolagem do main não vaza para o resto da página */
+  overscroll-behavior:contain;
+}
+main::-webkit-scrollbar{width:10px}
+main::-webkit-scrollbar-track{background:#0d1420}
+main::-webkit-scrollbar-thumb{background:#2a3650;border-radius:999px;border:2px solid #0d1420}
+main::-webkit-scrollbar-thumb:hover{background:#3a4c6f}
+
+/* o cabeçalho não precisa mais ser sticky: nunca sai da tela */
+header{position:relative}
+
+/* a faixa do overscroll acompanha a área de produtos, não a janela toda */
+
+
+
+/* ============ barra inicial ocupa a linha inteira ============
+   a busca fica compacta e o bloco do total preenche o resto,
+   com o rótulo na esquerda e o valor encostado na direita */
+.total-geral{
+  flex:1 1 auto;
+  justify-content:space-between;
+  align-items:center;
+  padding:8px 18px;
+}
+.total-geral .valor{font-size:20px}
+
+/* ============ barra inicial: a busca estica, o total fica compacto ============ */
+.barra-inicial input[type="text"]{flex:1 1 auto;max-width:none}
+.total-geral{
+  flex:0 0 auto;
+  justify-content:flex-start;
+  gap:10px;
+  padding:8px 16px;
+}
+
+/* a busca herdava width:100%, o que virava base flexível de 100% e jogava
+   o total para a linha de baixo; com base 0 os dois dividem a mesma linha */
+.barra-inicial{flex-wrap:nowrap}
+.barra-inicial input[type="text"]{flex:1 1 0;width:auto;min-width:160px}
+
+/* ============ espaço depois da última linha de produtos ============ */
+main{padding-bottom:524px}
+
+/* ============ passagem para o projeto seguinte ============
+   uma cópia do projeto de destino desliza por cima do atual */
+.layout{position:relative}
+
+.camada-projeto{
+  position:absolute;
+  left:280px;right:0;top:0;bottom:0;   /* cobre só a área de produtos */
+  z-index:8;
+  background:var(--bg);
+  padding:16px 16px 64px;
+  overflow:hidden;
+  box-shadow:0 -18px 50px rgba(0,0,0,.5);
+  will-change:transform;
+  transition:transform .42s cubic-bezier(.22,.61,.36,1);
+}
+.camada-projeto.de-baixo{transform:translateY(100%)}
+.camada-projeto.de-cima{transform:translateY(-100%)}
+.camada-projeto.entrando{transform:translateY(0)}
+
+@media (max-width:900px){
+  .camada-projeto{left:0}
+}
+
+
+
+
+/* ============================================================
+   IMAGENS SEM PISCAR
+   O brilho infinito no fundo de toda imagem ainda sem src era o que
+   aparecia como "preto piscando": dezenas deles animando ao mesmo
+   tempo durante a rolagem. Agora o lugar da imagem é uma superfície
+   parada, e a foto entra com um esmaecimento curto quando chega.
+   ============================================================ */
+img:not([src]){
+  background:#141a25;
+  background-size:auto;
+  animation:none;
+}
+/* o esmaecimento e uma animacao de entrada, nao um opacity:0 fixo:
+   se o navegador nao estiver animando (aba em segundo plano, por
+   exemplo), a imagem aparece inteira em vez de ficar invisivel */
+@keyframes imgentra{from{opacity:0}to{opacity:1}}
+img[data-lazy-src][src]{animation:imgentra .18s ease}
+.img-missing{background:#161c27;animation:none}
+
+/* ============================================================
+   TOPO FIXO DA ÁREA DE PRODUTOS
+   A barra ocupa o mesmo espaço de antes (margem negativa desfaz o
+   respiro do main e o padding devolve por dentro), então nada se
+   mexe ao entrar; o que muda é só a aparência quando rola.
+   ============================================================ */
+/* O Chrome recua o ponto de fixação pela padding do container que rola:
+   com main{padding:16px}, "top:0" grudava 16px abaixo do alto e sobrava
+   uma faixa por onde as imagens apareciam. A padding de cima sai do main
+   e vira padding da própria barra — o respiro é o mesmo e ela cola no
+   alto de verdade. */
+/* ============================================================
+   SÓ O CONTEÚDO ROLA
+   Conteúdo é a grade de produtos (ou de projetos). Nome, total,
+   busca e ícones não são conteúdo: ficam FORA da área de rolagem,
+   então não sobem, não descem e nada passa por baixo deles.
+   Antes o main inteiro rolava e a barra era presa por position:sticky
+   — daí o balanço, o vão do alto e as imagens aparecendo atrás dela.
+   ============================================================ */
+main{
+  padding:0;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+}
+main > .view{
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+  flex:1;
+}
+/* cabeçalho da tela: altura fixa, sem rolagem, sem sticky */
+main > .view > .toolbar{
+  flex:none;
+  margin:0;
+  padding:16px;
+  background:var(--bg);
+  border-bottom:1px solid var(--border);
+}
+main > .view > .toolbar h1{font-size:25px;line-height:1.1}
+
+/* palco: não rola, e é dentro dele que a passagem de projeto desliza */
+main > .view > .view-area{
+  flex:1;
+  min-height:0;
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+
+/* a única coisa que rola */
+.view-corpo{
+  flex:1;
+  min-height:0;
+  /* scroll, não auto: com auto a barra some quando não há o que rolar e
+     volta do nada quando há, e a largura da área pula junto */
+  overflow-y:scroll;
+  overflow-x:hidden;
+  scrollbar-gutter:stable;
+  /* o 524px de baixo é o espaço depois da última linha de produtos, que
+     antes vinha do main; quem rola agora é aqui, então mora aqui */
+  padding:16px 16px 524px;
+  overscroll-behavior:none;      /* sem o repique elástico do Chrome */
+  scrollbar-color:#2a3650 #0d1420;
+  scrollbar-width:thin;
+}
+.view-corpo::-webkit-scrollbar{width:10px}
+.view-corpo::-webkit-scrollbar-track{background:#0d1420}
+.view-corpo::-webkit-scrollbar-thumb{background:#2a3650;border-radius:999px;border:2px solid #0d1420}
+.view-corpo::-webkit-scrollbar-thumb:hover{background:#3a4c6f}
+
+/* ---- passagem para o projeto seguinte ----
+   Desliza só o conteúdo, dentro do palco. A barra do topo fica parada
+   no lugar e troca de texto por conta própria. */
+.camada-projeto{
+  position:absolute;
+  inset:0;
+  left:0;right:0;top:0;bottom:0;
+  z-index:8;
+  background:var(--bg);
+  /* mesmo recuo do corpo de verdade: a barra de rolagem da camada fica
+     do mesmo tamanho e no mesmo lugar, senão ela some durante a
+     passagem (a camada tapa o canto direito) e reaparece no fim */
+  padding:16px 16px 524px;
+  overflow-y:scroll;
+  overflow-x:hidden;
+  scrollbar-gutter:stable;
+  scrollbar-color:#2a3650 #0d1420;
+  scrollbar-width:thin;
+  box-shadow:0 -18px 50px rgba(0,0,0,.5);
+  will-change:transform;
+  transition:transform .42s cubic-bezier(.22,.61,.36,1);
+}
+.camada-projeto::-webkit-scrollbar{width:10px}
+.camada-projeto::-webkit-scrollbar-track{background:#0d1420}
+.camada-projeto::-webkit-scrollbar-thumb{background:#2a3650;border-radius:999px;border:2px solid #0d1420}
+.camada-projeto::-webkit-scrollbar-thumb:hover{background:#3a4c6f}
+
+/* O conteúdo do projeto que entra sobe bem desfocado e só ganha nitidez
+   depois de parar no lugar, num fade de 1s. Assim a foto nunca "aparece
+   do nada": ela já está ali o tempo todo, só embaçada.
+   O leve aumento de escala esconde a borda transparente que o desfoque
+   cria nos cantos da imagem. */
+.camada-projeto .pic img{
+  filter:blur(24px);
+  transform:scale(1.15);
+  transition:filter .5s ease, transform .5s ease;
+}
+.camada-projeto.nitido .pic img{
+  filter:blur(0);
+  transform:none;
+}
+
+/* nome e total não pulam: saem e voltam com um deslocamento curto */
+#projectTitle,#projectTotal{
+  transition:opacity .16s ease, transform .16s ease;
+}
+#projectTitle.trocando,#projectTotal.trocando{opacity:0}
+#projectTitle.trocando.sobe,#projectTotal.trocando.sobe{transform:translateY(-9px)}
+#projectTitle.trocando.desce,#projectTotal.trocando.desce{transform:translateY(9px)}
+
+/* ============================================================
+   ARRASTAR: pontilhado e alcinha
+   ============================================================ */
+/* a largura vem do container; fixá-la estourava a margem da lateral
+   e o pontilhado ficava fora da área visível */
+.sortable-placeholder{
+  box-sizing:border-box;
+  width:auto;
+  border:2px dashed var(--brand)!important;
+  background:rgba(110,168,254,.10)!important;
+  border-radius:12px;
+}
+.project-list .sortable-placeholder{
+  width:auto;margin:4px 10px 4px 6px;min-height:44px;
+  border-radius:10px;list-style:none;
+}
+
+/* o item continua no lugar dele enquanto arrasta: se soltar fora,
+   volta sozinho, e o usuário não perde a referência do layout */
+.sortable-dragging{opacity:.34;outline:1px dashed var(--brand);outline-offset:3px}
+
+/* 6 pontinhos discretos, colados no canto e na imagem ao lado */
+.drag-handle{
+  cursor:grab;user-select:none;
+  font-size:10px;line-height:1;letter-spacing:-.5px;
+  padding:0;border:0;border-radius:0;
+  opacity:.32;color:var(--muted);
+  flex:0 0 auto;
+}
+.drag-handle:hover{opacity:.95;border:0;color:var(--text)}
+.project-list li{gap:6px;padding:10px 12px 10px 6px}
+
+/* ============ rolagem contínua entre projetos ============
+   Todos os projetos ficam um embaixo do outro na mesma rolagem.
+   Nada desliza, nada pisca: quem rola é o navegador. */
+.fluxo-projetos{display:block}
+.bloco-projeto{padding:0 0 34px}
+.bloco-projeto + .bloco-projeto{
+  margin-top:126px;
+  border-top:1px solid #1b2534;
+  padding-top:22px;
+}
+.bloco-titulo{
+  display:flex;align-items:baseline;gap:12px;
+  margin:0 0 14px;
+}
+.bloco-titulo h2{
+  margin:0;font-size:17px;font-weight:650;letter-spacing:.2px;
+  color:var(--text);opacity:.85;
+}
+.bloco-total{font-size:12px;color:#8aa0c0;opacity:.9}
+
+  </style>
+</head>
+<body>
+  <!-- tela de carregamento / erro: comeca visivel e o app a esconde quando termina -->
+  <div id="loader" class="loader">
+    <div class="loader-box">
+      <div class="loader-title" id="loaderTitle">Abrindo…</div>
+      <div class="loader-msg" id="loaderMsg">Iniciando o aplicativo</div>
+      <div class="loader-bar"><div class="loader-fill" id="loaderFill"></div></div>
+      <div class="loader-count" id="loaderCount"></div>
+      <div class="loader-error" id="loaderError" hidden></div>
+      <button class="btn" id="loaderClose" hidden>Fechar</button>
+    </div>
+  </div>
+
+  <header>
+    <div id="btnBack"></div>
+    <button class="icon-btn" id="btnToggleSidebar" title="Ocultar/mostrar a barra de projetos"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/></svg></button>
+    <div class="title">📦 Projetos & Produtos — Offline</div>
+    <span id="modoAviso" class="modo-aviso" hidden></span>
+    <div class="spacer"></div>
+    <button class="btn brand" id="btnNewProject">+ Projeto</button>
+    <button class="btn" id="btnNewProduct" title="Novo produto no projeto atual">+ Produto</button>
+    <button class="icon-btn" id="btnViewProjects" title="Ver projetos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-folder-git2-icon lucide-folder-git-2"><path d="M9 20H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H20a2 2 0 0 1 2 2v5"/><circle cx="13" cy="12" r="2"/><path d="M18 19c-2.8 0-5-2.2-5-5v8"/><circle cx="20" cy="19" r="2"/></svg></button>
+    <button class="icon-btn" id="btnViewAll" title="Ver todos os produtos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-grid-icon lucide-layout-grid"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg></button>
+    <button class="icon-btn" id="btnBackup" title="Exportar (.prjz)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download-icon lucide-download"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg></button>
+    <button class="icon-btn" id="btnRestore" title="Importar (.prjz ou .json)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-monitor-up-icon lucide-monitor-up"><path d="m9 10 3-3 3 3"/><path d="M12 13V7"/><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M12 17v4"/><path d="M8 21h8"/></svg></button>
+  </header>
+
+  <div class="layout" id="layout">
+    <aside id="aside">
+      <div class="aside-head">Projetos</div>
+      <ul id="projectList" class="project-list"></ul>
+    </aside>
+
+    <main>
+      <!-- PROJETOS -->
+      <section id="viewProjects" class="view">
+        <div class="toolbar barra-inicial">
+          <input id="searchProjects" type="text" placeholder="Pesquisa aqui..."/>
+          <div class="total-geral">
+            <span class="rotulo">Total geral</span>
+            <span class="valor" id="allValue">R$ 0,00</span>
+          </div>
+        </div>
+        <div class="view-area">
+          <div class="view-corpo">
+            <div class="cards" id="projectsGrid"></div>
+            <div class="muted" id="projectsEmpty" style="margin-top:8px">Crie um projeto com <b>+ Projeto</b>.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROJETO -->
+      <section id="viewProject" class="view hidden">
+        <div class="toolbar">
+          <h1 id="projectTitle" style="margin:0;opacity:0.7;"></h1>
+          <div class="spacer"></div>
+          <span class="badge" id="projectTotal">Total do Projeto: R$ 0,00</span>
+          <div class="alternador" role="group" aria-label="Modo de exibição">
+            <button type="button" class="alt-btn" data-layout="grade" title="Ver em grade"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg></button>
+            <button type="button" class="alt-btn" data-layout="lista" title="Ver em lista"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></button>
+          </div>
+          <button class="btn" id="btnEditProject"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-icon lucide-pencil"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg> Editar</button>
+          <button class="btn" id="btnSaveProject" title="Exportar só este projeto (.prjz)"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg> Salvar Projeto</button>
+          <!--<button class="btn" id="btnCoverProject">📷 Capa</button>-->
+          <button class="btn" id="btnDeleteProject" style="border-color:#402226;background:#2a1216;color:#ffb3bd"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash"><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> Excluir</button>
+        </div>
+        <div class="view-area">
+          <div class="view-corpo">
+            <div id="productsGrid" class="cards products"></div>
+            <div class="muted" id="productsEmpty" style="margin-top:8px">Sem produtos. Use <b>+ Produto</b>.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TODOS -->
+      <section id="viewAll" class="view hidden">
+        <div class="toolbar">
+          <input id="searchAll" type="text" placeholder="Buscar em todos os produtos…"/>
+          <div class="spacer"></div>
+          <div class="alternador" role="group" aria-label="Modo de exibição">
+            <button type="button" class="alt-btn" data-layout="grade" title="Ver em grade"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg></button>
+            <button type="button" class="alt-btn" data-layout="lista" title="Ver em lista"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></button>
+          </div>
+        </div>
+        <div class="view-area">
+          <div class="view-corpo">
+            <div id="allGrid" class="cards products"></div>
+            <div class="muted" id="allEmpty" style="margin-top:8px">Sem produtos.</div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- MODAL: Projeto -->
+  <dialog id="modalProject">
+    <form method="dialog" id="formProject">
+      <div class="modal-head">
+        <span id="modalProjectTitle">Novo Projeto</span>
+        <!-- NÃO envia o form -->
+        <button type="button" class="btn" onclick="document.getElementById('modalProject').close()">Fechar</button>
+      </div>
+      <div class="modal-body">
+        <div class="grid-form">
+          <div>
+            <label>Nome do projeto</label>
+            <input type="text" id="projName" required />
+          </div>
+          <div>
+            <label>Capa do Projeto</label>
+            <input type="file" id="projCover" accept="image/*" />
+            <div id="projCoverPreview" style="margin-top:6px"></div>
+          </div>
+        </div>
+        <div>
+          <label>Descrição (opcional)</label>
+          <textarea id="projDesc" placeholder="Notas internas…"></textarea>
+        </div>
+              <div class="arquivados" id="arquivadosBloco" hidden>
+          <div class="arquivados-titulo">Produtos arquivados <span id="arquivadosContador"></span></div>
+          <div class="arquivados-lista" id="arquivadosLista"></div>
+        </div>
+
+      </div>
+      <div class="modal-foot">
+        <!-- <button class="btn" value="cancel">Cancelar</button> -->
+        <button type="button" class="btn brand" id="saveProjectBtn">Salvar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- MODAL: Produto -->
+  <dialog id="modalProduct">
+    <form method="dialog" id="formProduct">
+      <div class="modal-head">
+        <span id="modalProductTitle">Novo Produto</span>
+        <div class="modal-head-acoes">
+          <button type="button" class="btn" id="btnArquivarProduto">Arquivar</button>
+          <button type="button" class="btn" onclick="document.getElementById('modalProduct').close()">Fechar</button>
+        </div>
+      </div>
+      <div class="modal-body">
+
+          <div class="product-editor-top">
+            <div>
+              <label>Imagem principal</label>
+              <div id="imagePreview" class="editor-main-preview" style="margin-top:8px"></div>
+              <input type="file" id="prodImage" accept="image/*" hidden />
+            </div>
+
+            <div class="product-editor-side">
+              <div>
+                <label>Nome</label>
+                <input type="text" id="prodName" required />
+              </div>
+
+              <div class="grid-form">
+                <div>
+                  <label>Valor (R$)</label>
+                  <input type="number" id="prodPrice" step="0.01" min="0" placeholder="0,00" />
+                </div>
+                <div>
+                  <label>Frequência</label>
+                  <select id="prodFrequency">
+                    <option value="">Frequência</option>
+                    <option value="unica">Compra única</option>
+                    <option value="mensal">1 vez por mês</option>
+                    <option value="bimestral">2 em 2 meses</option>
+                    <option value="trimestral">3 em 3 meses</option>
+                    <option value="semestral">6 em 6 meses</option>
+                    <option value="anual">1 vez ao ano</option>
+                    <option value="cinco-anos">Dura uns 5 anos</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="grid-form">
+                <div>
+                  <label>Pesquisa Google</label>
+                  <input type="text" id="prodSearch" placeholder="texto para pesquisar no Google" />
+                </div>
+                <div>
+                  <label>Projeto</label>
+                  <select id="prodProject"></select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label>Descrição</label>
+            <textarea id="prodDesc" placeholder="Descrição breve…"></textarea>
+          </div>
+
+          <div>
+            <label>Link de venda</label>
+            <input type="url" id="prodLink" placeholder="https://" />
+          </div>
+
+          <input type="text" id="prodImagePath" hidden />
+
+          <div class="galeria-bloco">
+            <div class="galeria-cabecalho">
+              <label>Galeria do produto</label>
+              <span class="galeria-contador" id="galeriaContador">nenhuma imagem</span>
+            </div>
+            <div class="galeria-acoes">
+              <input type="file" id="prodGalleryFiles" accept="image/*" multiple hidden />
+              <button type="button" class="btn" id="btnGaleriaCarregar">Carregar imagens</button>
+              <button type="button" class="btn" id="btnGaleriaLimpar">Limpar galeria</button>
+            </div>
+            <div id="galleryPreview" class="editor-gallery"></div>
+            <details class="galeria-avancado">
+              <summary>Adicionar por caminho ou link</summary>
+              <textarea id="prodGalleryPaths" placeholder="img-1.jpg&#10;https://exemplo.com/img-2.jpg"></textarea>
+              <button type="button" class="btn" id="btnGaleriaAddPaths">Adicionar à galeria</button>
+            </details>
+          </div>
+
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn brand" id="saveProductBtn">Salvar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- pagina de visualizacao do produto: sobe de baixo para cima -->
+  <div id="ficha" class="ficha" hidden>
+    <div class="ficha-fundo" data-fechar-ficha></div>
+    <button type="button" class="ficha-seta esq" data-produto="-1" title="Produto anterior" aria-label="Produto anterior">‹</button>
+    <button type="button" class="ficha-seta dir" data-produto="1" title="Próximo produto" aria-label="Próximo produto">›</button>
+    <section class="ficha-painel" role="dialog" aria-label="Detalhes do produto">
+      <div class="ficha-puxador"></div>
+      <button type="button" class="ficha-fechar" data-fechar-ficha title="Fechar">✕</button>
+
+      <div class="ficha-corpo">
+        <div class="ficha-topo">
+          <div class="ficha-visual">
+            <div class="deck" id="fichaDeck" title="Clique em cima ou embaixo da foto para trocar"></div>
+            <div class="deck-contador" id="fichaGaleriaContador"></div>
+          </div>
+          <div class="ficha-info">
+            <h2 id="fichaNome"></h2>
+            <div class="ficha-projeto" id="fichaProjeto"></div>
+            <div class="ficha-preco" id="fichaPreco"></div>
+            <div class="ficha-etiquetas" id="fichaEtiquetas"></div>
+            <p class="ficha-desc" id="fichaDesc"></p>
+            <div class="ficha-acoes" id="fichaAcoes"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- visor em tela cheia -->
+  <div id="visor" class="visor" hidden>
+    <button type="button" class="visor-fechar" data-fechar-visor title="Fechar">✕</button>
+    <button type="button" class="visor-seta prev" id="visorPrev" title="Anterior">‹</button>
+    <div class="visor-palco" id="visorPalco"></div>
+    <button type="button" class="visor-seta next" id="visorNext" title="Próxima">›</button>
+    <div class="visor-contador" id="visorContador"></div>
+  </div>
+
+  <script>
+/* ============================================================
+   TELA DE CARREGAMENTO
+   Tudo que demora passa por aqui: abertura, importacao e
+   exportacao. Se algo falhar, o erro aparece na tela em vez
+   de sumir num alert.
+   ============================================================ */
+const loaderEl = document.getElementById('loader');
+const loaderTitle = document.getElementById('loaderTitle');
+const loaderMsg = document.getElementById('loaderMsg');
+const loaderFill = document.getElementById('loaderFill');
+const loaderCount = document.getElementById('loaderCount');
+const loaderErrorEl = document.getElementById('loaderError');
+const loaderCloseBtn = document.getElementById('loaderClose');
+const loaderBar = loaderEl ? loaderEl.querySelector('.loader-bar') : null;
+
+loaderCloseBtn?.addEventListener('click', ()=> progressHide());
+
+function progressShow(title, msg = ''){
+  if(!loaderEl) return;
+  loaderTitle.textContent = title;
+  loaderMsg.textContent = msg;
+  loaderCount.textContent = '';
+  loaderErrorEl.hidden = true;
+  loaderCloseBtn.hidden = true;
+  loaderBar.classList.add('indeterminate');
+  loaderFill.style.width = '';
+  loaderEl.hidden = false;
+}
+
+function progressStep(msg){
+  if(!loaderEl) return;
+  loaderMsg.textContent = msg;
+  loaderCount.textContent = '';
+  loaderBar.classList.add('indeterminate');
+  loaderFill.style.width = '';
+}
+
+function progressSet(done, total, msg){
+  if(!loaderEl) return;
+  if(msg) loaderMsg.textContent = msg;
+  if(total > 0){
+    const pct = Math.max(0, Math.min(100, Math.round(done / total * 100)));
+    loaderBar.classList.remove('indeterminate');
+    loaderFill.style.width = pct + '%';
+    loaderCount.textContent = done + ' de ' + total + '  ·  ' + pct + '%';
+  }
+}
+
+function progressHide(){
+  if(loaderEl) loaderEl.hidden = true;
+}
+
+function progressError(title, html){
+  if(!loaderEl){ alert(title); return; }
+  loaderEl.hidden = false;
+  loaderTitle.textContent = title;
+  loaderMsg.textContent = '';
+  loaderCount.textContent = '';
+  loaderBar.classList.remove('indeterminate');
+  loaderFill.style.width = '0%';
+  loaderErrorEl.innerHTML = html;
+  loaderErrorEl.hidden = false;
+  loaderCloseBtn.hidden = false;
+}
+
+/* Devolve o controle ao navegador para a barra realmente repintar. */
+let lastYield = 0;
+async function uiTick(force = false){
+  // so cede a vez depois de acumular trabalho suficiente; ceder a cada item
+  // custa mais do que o proprio trabalho (e muito mais com a aba em segundo
+  // plano, onde o navegador limita temporizadores).
+  if(!force && performance.now() - lastYield < 120) return;
+  // rAF garante a repintura, mas nao dispara com a aba em segundo plano;
+  // o timeout evita que a operacao inteira congele nesse caso.
+  await new Promise(r => {
+    let pronto = false;
+    const fim = ()=> { if(!pronto){ pronto = true; r(); } };
+    requestAnimationFrame(()=> setTimeout(fim, 0));
+    setTimeout(fim, 30);
+  });
+  // marca depois de voltar: o relogio conta o trabalho, nao a espera
+  lastYield = performance.now();
+}
+
+/* Explica por que o banco nao abriu, em vez de so dizer que falhou. */
+function explainDbFailure(err){
+  const viaArquivo = location.protocol === 'file:';
+  const motivo = viaArquivo
+    ? '<b>O app foi aberto direto do arquivo.</b> Nesse modo o navegador bloqueia o banco de dados local, ' +
+      'então ele não consegue guardar nem ler seus projetos.'
+    : '<b>O navegador recusou o banco de dados local (IndexedDB).</b> Isso costuma acontecer em janela anônima ' +
+      'ou com dados de site bloqueados nas configurações.';
+  const saida = viaArquivo
+    ? '<ol><li>Abra a pasta do app e dê dois cliques em <code>iniciar.cmd</code>.</li>' +
+      '<li>O endereço correto começa com <code>http://localhost</code>, e não com <code>file:///</code>.</li></ol>'
+    : '<ol><li>Saia da janela anônima, se estiver em uma.</li>' +
+      '<li>Permita dados de site para este endereço nas configurações do navegador.</li></ol>';
+  return motivo + saida +
+    '<div style="margin-top:10px;opacity:.75;font-size:12px">Detalhe técnico: ' +
+    escapeHTML(String(err && err.message ? err.message : err)) + '</div>';
+}
+
+const DB_NAME = 'projprod_db_v2';
+const DB_VERSION = 3;
+const STORES = { projects: 'projects', products: 'products', images: 'images' };
+let db;
+
+const el = (q) => document.querySelector(q);
+const projectList = el('#projectList');
+const projectsGrid = el('#projectsGrid');
+const projectsEmpty = el('#projectsEmpty');
+const productsGrid = el('#productsGrid');
+const productsEmpty = el('#productsEmpty');
+const allGrid = el('#allGrid');
+const allEmpty = el('#allEmpty');
+const allValue = el('#allValue');
+
+const viewProjects = el('#viewProjects');
+const viewProject = el('#viewProject');
+const viewAll = el('#viewAll');
+
+const layoutEl = el('#layout');
+const btnToggleSidebar = el('#btnToggleSidebar');
+const btnBack = el('#btnBack');
+const btnNewProject = el('#btnNewProject');
+const btnNewProduct = el('#btnNewProduct');
+const btnViewProjects = el('#btnViewProjects');
+const btnViewAll = el('#btnViewAll');
+const btnBackup = el('#btnBackup');
+const btnRestore = el('#btnRestore');
+const btnEditProject = el('#btnEditProject');
+const btnSaveProject = el('#btnSaveProject');
+const btnDeleteProject = el('#btnDeleteProject');
+
+const searchProjects = el('#searchProjects');
+const searchAll = el('#searchAll');
+
+const modalProject = el('#modalProject');
+const modalProduct = el('#modalProduct');
+
+const projName = el('#projName');
+const projDesc = el('#projDesc');
+const projCover = el('#projCover');
+const projCoverPreview = el('#projCoverPreview');
+
+const prodName = el('#prodName');
+const prodProject = el('#prodProject');
+const prodDesc = el('#prodDesc');
+const prodPrice = el('#prodPrice');
+const prodLink = el('#prodLink');
+const prodSearch = el('#prodSearch');
+const prodImage = el('#prodImage');
+const prodImagePath = el('#prodImagePath');
+const prodGalleryPaths = el('#prodGalleryPaths');
+const imagePreview = el('#imagePreview');
+const galleryPreview = el('#galleryPreview');
+
+const projectTitle = el('#projectTitle');
+const projectTotal = el('#projectTotal');
+
+const fmt = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+const state = {
+  currentView: 'projects',
+  currentProjectId: null,
+  editProjectId: null,
+  editProductId: null,
+  editGallery: [],
+  editLista: [],
+  editPos: -1,
+  imagemRemovida: false,
+  layoutProdutos: 'grade',
+  dragProjectId: null,
+  dragProductId: null,
+  dragProductProjectId: null,
+};
+
+let dragMeta = null;
+
+/* ============================================================
+   ARRASTAR E SOLTAR
+   Regras combinadas:
+     - o lugar de origem NAO some enquanto arrasta: o item fica
+       ali, apagado, para o usuario nao se perder e para poder
+       desistir soltando fora;
+     - passando por cima de um item, o alvo e SEMPRE depois dele;
+     - com o ponteiro acima de todos, o alvo e a primeira posicao;
+     - o pontilhado marca exatamente onde o item vai cair;
+     - quem se desloca para abrir espaco anda com uma animacao
+       curta (FLIP), para a mudanca nao parecer defeito.
+   ============================================================ */
+const REORDENA_MS = 170;    // deslocamento dos vizinhos: curto de proposito
+
+function createPlaceholderFor(el){
+  const ph = document.createElement(el.tagName === 'LI' ? 'li' : 'div');
+  ph.className = 'sortable-placeholder';
+  // so a altura vai inline: a largura vem do proprio container (celula da
+  // grade ou linha da lateral). Fixar a largura estourava a margem da
+  // barra lateral e o pontilhado sumia fora da area visivel.
+  ph.style.height = el.offsetHeight + 'px';
+  return ph;
+}
+
+/* Onde os itens REALMENTE estao no layout, em coordenadas de tela.
+   getBoundingClientRect nao serve aqui: enquanto a animacao de
+   reordenacao roda, ela devolve a posicao animada (o transform), e nao
+   a posicao final. Durante esses 170ms o calculo do alvo trabalhava com
+   medidas mentirosas e o pontilhado ficava indo e voltando sozinho.
+   offsetLeft/offsetTop sao valores de layout: o transform nao os toca. */
+function medirNoContainer(container){
+  const cr = container.getBoundingClientRect();
+  const mesmaAncora = container.offsetParent;
+  const ox = cr.left - container.offsetLeft;
+  const oy = cr.top - container.offsetTop;
+  return (n)=>{
+    // se a ancora do filho for outra, a conta nao vale: cai no rect mesmo
+    if(n.offsetParent !== mesmaAncora) return n.getBoundingClientRect();
+    const l = ox + n.offsetLeft, t = oy + n.offsetTop;
+    return { left: l, top: t, right: l + n.offsetWidth, bottom: t + n.offsetHeight,
+             width: n.offsetWidth, height: n.offsetHeight };
+  };
+}
+
+/* Mede antes, muda, e anima a diferenca (FLIP).
+   "antes" sai do rect de proposito: e onde o item APARECE agora, mesmo
+   no meio de outra animacao. "depois" sai do layout, que e o destino. */
+function animarReordenacao(container, mutar){
+  const filhos = [...container.children];
+  const antes = new Map();
+  for(const n of filhos) antes.set(n, n.getBoundingClientRect());
+  mutar();
+  const medir = medirNoContainer(container);
+  for(const n of filhos){
+    const a = antes.get(n);
+    const b = medir(n);
+    if(!b.width && !b.height) continue;      // saiu do fluxo
+    const dx = a.left - b.left, dy = a.top - b.top;
+    if(!dx && !dy) continue;
+    n._flip?.cancel();
+    n._flip = n.animate(
+      [{ transform: 'translate(' + dx + 'px, ' + dy + 'px)' }, { transform: 'none' }],
+      { duration: REORDENA_MS, easing: 'cubic-bezier(.2,.7,.3,1)' }
+    );
+  }
+}
+
+/* Qual item o ponteiro esta tocando e de que lado o pontilhado entra.
+   Devolve null quando nao ha nada a mudar. */
+function alvoDoMarcador(container, x, y){
+  const ph = dragMeta.placeholder;
+  const medir = medirNoContainer(container);
+
+  // 0) ponteiro em cima do proprio pontilhado: ja esta onde foi pedido.
+  //    Sem isso a grade oscila ao passar pelo ultimo item de uma linha:
+  //    o pontilhado entra depois dele, ocupa justamente o lugar onde o
+  //    ponteiro esta, e o calculo seguinte mandaria tudo de volta.
+  if(ph.parentNode === container){
+    const p = medir(ph);
+    if(x >= p.left && x <= p.right && y >= p.top && y <= p.bottom) return null;
+  }
+
+  const itens = [...container.querySelectorAll('[data-sortable-item]')];
+  if(!itens.length) return { ref: null, depois: true };
+
+  // 1) em cima de um item -> o arrastado vai logo depois dele
+  for(const it of itens){
+    const b = medir(it);
+    if(x >= b.left && x <= b.right && y >= b.top && y <= b.bottom){
+      return { ref: it, depois: true };
+    }
+  }
+
+  // 2) acima de tudo -> primeiro da lista
+  if(y < medir(itens[0]).top) return { ref: itens[0], depois: false };
+
+  // 3) num vao da MESMA linha -> o vizinho horizontal decide o lado.
+  //    Medir distancia em duas dimensoes puxava itens da linha de cima,
+  //    que numa grade fica bem longe do que o olho entende por "perto".
+  const naLinha = itens.filter(it => {
+    const b = medir(it);
+    return y >= b.top && y <= b.bottom;
+  });
+  if(naLinha.length){
+    let melhor = naLinha[0], menor = Infinity;
+    for(const it of naLinha){
+      const b = medir(it);
+      const d = Math.abs(x - (b.left + b.width / 2));
+      if(d < menor){ menor = d; melhor = it; }
+    }
+    const b = medir(melhor);
+    return { ref: melhor, depois: x > b.left + b.width / 2 };
+  }
+
+  // 4) entre linhas ou depois do fim -> depois do ultimo item que ja acabou
+  let ultimo = itens[0];
+  for(const it of itens){
+    if(medir(it).top <= y) ultimo = it;
+  }
+  return { ref: ultimo, depois: true };
+}
+
+function posicionarMarcador(container, x, y){
+  const ph = dragMeta.placeholder;
+  const alvo = alvoDoMarcador(container, x, y);
+  if(!alvo) return;
+  const { ref, depois } = alvo;
+  const antes = ref ? (depois ? ref.nextSibling : ref) : null;
+  if(antes === ph) return;                                   // ja esta la
+  if(!antes && ph.parentNode === container && !ph.nextSibling) return;
+  animarReordenacao(container, ()=>{
+    if(antes) container.insertBefore(ph, antes);
+    else container.appendChild(ph);
+  });
+}
+
+function handleContainerDragOver(e, container){
+  if(!dragMeta || dragMeta.container !== container) return;
+  e.preventDefault();
+  if(e.dataTransfer) e.dataTransfer.dropEffect = 'move';
+  posicionarMarcador(container, e.clientX, e.clientY);
+}
+
+function startSortableDrag(e, el, container, meta){
+  dragMeta = { el, container, placeholder: createPlaceholderFor(el), ...meta };
+  el.classList.add('sortable-dragging');
+  if(e.dataTransfer){
+    e.dataTransfer.effectAllowed = 'move';
+    try{ e.dataTransfer.setData('text/plain', meta.id || 'drag'); }catch(_){}
+  }
+  // mexer no DOM dentro do dragstart estraga a imagem que o navegador
+  // captura para arrastar, entao o pontilhado entra no quadro seguinte
+  setTimeout(() => {
+    if(dragMeta?.placeholder && !dragMeta.placeholder.parentNode){
+      animarReordenacao(container, ()=>{
+        container.insertBefore(dragMeta.placeholder, el.nextSibling);
+      });
+    }
+  }, 0);
+}
+
+async function finishSortableDrag(onDrop){
+  if(!dragMeta) return;
+  const { el, placeholder, container } = dragMeta;
+  const solto = placeholder.parentNode === container;
+  if(solto){
+    animarReordenacao(container, ()=>{
+      container.insertBefore(el, placeholder);
+      placeholder.remove();
+    });
+  } else {
+    placeholder.remove();
+  }
+  el.classList.remove('sortable-dragging');
+  const meta = dragMeta;
+  dragMeta = null;
+  if(solto) await onDrop(container, meta);
+}
+
+function cancelSortableDrag(){
+  if(!dragMeta) return;
+  const { el, placeholder, container } = dragMeta;
+  el.classList.remove('sortable-dragging');
+  if(placeholder.parentNode === container) animarReordenacao(container, ()=> placeholder.remove());
+  else placeholder.remove();
+  dragMeta = null;
+}
+
+/* Grava a ordem que esta na tela. Quem chama decide o que redesenhar:
+   redesenhar tudo aqui derrubava a tela atual (renderProjects troca de
+   view) e fazia o item parecer que voltava para o lugar de antes. */
+async function persistProjectOrderFromDOM(container = projectsGrid, seletor = '.card[data-id]'){
+  const ids = [...container.querySelectorAll(seletor)].map(el => el.dataset.id);
+  const projects = await getAll(STORES.projects);
+  const map = new Map(projects.map(p => [p.id, p]));
+  for(let i=0;i<ids.length;i++){
+    const item = map.get(ids[i]);
+    if(item && item.order !== i){ item.order = i; await put(STORES.projects, item); }
+  }
+}
+
+async function persistProductOrderFromDOM(projectId){
+  if(!projectId) return;
+  // cada projeto tem a sua grade dentro da rolagem contínua
+  const grade = productsGrid.querySelector(`.cards[data-projeto="${projectId}"]`) || productsGrid;
+  const ids = [...grade.querySelectorAll('.product[data-id]')].map(el => el.dataset.id);
+  const products = await getProductsByProject(projectId);
+  const map = new Map(products.map(p => [p.id, p]));
+  let changed = false;
+  for(let i=0;i<ids.length;i++){
+    const item = map.get(ids[i]);
+    if(item && item.order !== i){
+      item.order = i;
+      await put(STORES.products, item);
+      changed = true;
+    }
+  }
+  return changed;
+}
+
+const DB_TIMEOUT = 4000;
+function openDB(){
+  return new Promise((resolve,reject)=>{
+    if(!window.indexedDB) return reject(new Error('indexedDB indisponível neste contexto'));
+    let encerrado = false;
+    const encerrar = (fn, arg)=>{ if(encerrado) return; encerrado = true; clearTimeout(prazo); fn(arg); };
+    const prazo = setTimeout(()=> encerrar(reject, new Error(
+      'O navegador não respondeu ao pedido de abrir o banco em ' + (DB_TIMEOUT/1000) + 's.'
+    )), DB_TIMEOUT);
+    let req;
+    try{
+      req = indexedDB.open(DB_NAME, DB_VERSION);
+    }catch(e){ return encerrar(reject, e); }
+    req.onupgradeneeded = (e)=>{
+      const d = e.target.result;
+      if(!d.objectStoreNames.contains(STORES.projects)) d.createObjectStore(STORES.projects,{keyPath:'id'});
+      if(!d.objectStoreNames.contains(STORES.products)){
+        const s = d.createObjectStore(STORES.products,{keyPath:'id'});
+        s.createIndex('by_project','projectId');
+      }
+      if(!d.objectStoreNames.contains(STORES.images)) d.createObjectStore(STORES.images,{keyPath:'id'});
+    };
+    req.onsuccess = ()=>{ db = req.result; encerrar(resolve, db); };
+    req.onerror = ()=> encerrar(reject, req.error || new Error('falha ao abrir o banco'));
+  });
+}
+/* ============================================================
+   CAMADA DE DADOS — dois modos
+
+   modo 'banco'   : IndexedDB. Tudo que voce mexe fica salvo sozinho.
+                    Disponivel quando o app e servido por http://localhost.
+
+   modo 'memoria' : sem banco nenhum. Os dados vem do arquivo .prjz que
+                    voce abre, ficam na memoria enquanto a aba estiver
+                    aberta, e voltam para o arquivo quando voce exporta.
+                    E o modo usado quando o app e aberto direto do disco
+                    (file://), onde o navegador simplesmente ignora
+                    pedidos ao IndexedDB.
+   ============================================================ */
+let modoArmazenamento = 'memoria';
+const memoria = {
+  projects: new Map(),
+  products: new Map(),
+  images: new Map(),
+};
+let alteracoesNaoSalvas = false;
+
+const usandoBanco = () => modoArmazenamento === 'banco';
+
+function marcarAlterado(){
+  if(usandoBanco()) return;          // no modo banco tudo ja fica gravado
+  alteracoesNaoSalvas = true;
+  atualizarAvisoDeModo();
+}
+function marcarSalvo(){
+  alteracoesNaoSalvas = false;
+  atualizarAvisoDeModo();
+}
+
+function tx(store, mode = 'readonly'){ return db.transaction(store, mode).objectStore(store); }
+
+/* getAll e chamado muitas vezes a cada redesenho (uma vez por projeto, por
+   exemplo). Sem cache, cada chamada rele a tabela inteira do IndexedDB.
+   Qualquer escrita descarta o cache da tabela afetada.
+   O store de imagens NUNCA entra no cache: manter todos os blobs na memoria
+   anularia o carregamento sob demanda. */
+const cacheLeitura = new Map();
+const podeCachear = (store)=> store === STORES.projects || store === STORES.products;
+const invalidarCache = (store)=> cacheLeitura.delete(store);
+
+function getAll(store){
+  if(!usandoBanco()) return Promise.resolve([...memoria[store].values()]);
+  if(podeCachear(store)){
+    const pronto = cacheLeitura.get(store);
+    if(pronto) return Promise.resolve(pronto);
+  }
+  return new Promise((res, rej)=>{
+    const r = tx(store).getAll();
+    r.onsuccess = ()=>{
+      const lista = r.result || [];
+      if(podeCachear(store)) cacheLeitura.set(store, lista);
+      res(lista);
+    };
+    r.onerror = ()=> rej(r.error);
+  });
+}
+
+function get(store, key){
+  if(!usandoBanco()) return Promise.resolve(memoria[store].get(key));
+  if(podeCachear(store)){
+    const pronto = cacheLeitura.get(store);
+    if(pronto){
+      const achado = pronto.find(x => x && x.id === key);
+      if(achado) return Promise.resolve(achado);
+    }
+  }
+  return new Promise((res, rej)=>{
+    const r = tx(store).get(key);
+    r.onsuccess = ()=> res(r.result);
+    r.onerror = ()=> rej(r.error);
+  });
+}
+
+function put(store, val){
+  if(!usandoBanco()){ memoria[store].set(val.id, val); marcarAlterado(); return Promise.resolve(); }
+  invalidarCache(store);
+  return new Promise((res, rej)=>{
+    const r = tx(store, 'readwrite').put(val);
+    r.onsuccess = ()=> res();
+    r.onerror = ()=> rej(r.error);
+  });
+}
+
+function del(store, key){
+  if(!usandoBanco()){ memoria[store].delete(key); marcarAlterado(); return Promise.resolve(); }
+  invalidarCache(store);
+  return new Promise((res, rej)=>{
+    const r = tx(store, 'readwrite').delete(key);
+    r.onsuccess = ()=> res();
+    r.onerror = ()=> rej(r.error);
+  });
+}
+
+function clearStore(name){
+  if(!usandoBanco()){ memoria[name].clear(); marcarAlterado(); return Promise.resolve(); }
+  invalidarCache(name);
+  return new Promise((res, rej)=>{
+    const r = db.transaction(name, 'readwrite').objectStore(name).clear();
+    r.onsuccess = ()=> res();
+    r.onerror = ()=> rej(r.error);
+  });
+}
+
+/* Produtos arquivados continuam guardados, mas somem das listas e dos
+   totais. Só aparecem no editor do projeto, para desarquivar. */
+const estaArquivado = (p) => !!(p && p.archived);
+
+async function getProductsByProject(projectId, { incluirArquivados = false } = {}){
+  const todos = await getAll(STORES.products);
+  return todos.filter(p => p.projectId === projectId && (incluirArquivados || !estaArquivado(p)));
+}
+
+/* ---- aviso do modo de funcionamento, no cabecalho ---- */
+function atualizarAvisoDeModo(){
+  const alvo = document.getElementById('modoAviso');
+  if(!alvo) return;
+  if(usandoBanco()){
+    alvo.hidden = true;
+    return;
+  }
+  alvo.hidden = false;
+  alvo.className = 'modo-aviso' + (alteracoesNaoSalvas ? ' pendente' : '');
+  alvo.textContent = alteracoesNaoSalvas
+    ? 'Modo arquivo · alterações não exportadas'
+    : 'Modo arquivo';
+  alvo.title = alteracoesNaoSalvas
+    ? 'Você mexeu em algo e ainda não exportou. Use o botão Exportar para gravar no arquivo .prjz.'
+    : 'Os dados estão só na memória desta aba. Use Importar para abrir um .prjz e Exportar para salvar.';
+}
+
+/* Avisa antes de fechar a aba com alteracoes que so existem na memoria. */
+window.addEventListener('beforeunload', (e)=>{
+  if(usandoBanco() || !alteracoesNaoSalvas) return;
+  e.preventDefault();
+  e.returnValue = '';
+});
+
+/* Mensagem da tela inicial, que muda conforme o modo. */
+function textoTelaVazia(){
+  return usandoBanco()
+    ? 'Crie um projeto com <b>+ Projeto</b>.'
+    : 'Nenhum projeto aberto. Use o botão <b>Importar</b> (no topo) para abrir seu arquivo <b>.prjz</b>, '
+      + 'ou crie um projeto com <b>+ Projeto</b>.';
+}
+
+
+
+
+/* ============================================================
+   CAMADA DE IMAGENS  —  blobs no IndexedDB + carga sob demanda
+   Registros guardam a referência "idb:<hash>" no lugar do base64.
+   ============================================================ */
+const IMG_REF = 'idb:';
+const isImageRef = (s) => typeof s === 'string' && s.startsWith(IMG_REF);
+const refToId = (s) => String(s).slice(IMG_REF.length);
+const idToRef = (id) => IMG_REF + id;
+
+const MIME_EXT = { 'image/jpeg':'jpg', 'image/jpg':'jpg', 'image/png':'png', 'image/webp':'webp', 'image/avif':'avif', 'image/gif':'gif', 'image/svg+xml':'svg', 'image/bmp':'bmp' };
+const EXT_MIME = { jpg:'image/jpeg', jpeg:'image/jpeg', png:'image/png', webp:'image/webp', avif:'image/avif', gif:'image/gif', svg:'image/svg+xml', bmp:'image/bmp' };
+const extFromMime = (m) => MIME_EXT[String(m).toLowerCase()] || 'bin';
+const mimeFromExt = (e) => EXT_MIME[String(e).toLowerCase()] || 'application/octet-stream';
+
+/* Nem sempre dá para confiar no tipo que vem no Blob: um servidor mal
+   configurado devolve application/octet-stream e a imagem acabaria
+   guardada como .bin. Os primeiros bytes dizem a verdade. */
+async function detectarMime(blob){
+  const conhecido = MIME_EXT[String(blob.type).toLowerCase()];
+  if(conhecido) return blob.type.toLowerCase();
+  try{
+    const b = new Uint8Array(await blob.slice(0, 16).arrayBuffer());
+    const texto = (i, n)=> String.fromCharCode(...b.slice(i, i + n));
+    if(b[0] === 0xFF && b[1] === 0xD8) return 'image/jpeg';
+    if(b[0] === 0x89 && texto(1, 3) === 'PNG') return 'image/png';
+    if(texto(0, 4) === 'RIFF' && texto(8, 4) === 'WEBP') return 'image/webp';
+    if(texto(4, 4) === 'ftyp' && texto(8, 4).startsWith('avif')) return 'image/avif';
+    if(texto(0, 3) === 'GIF') return 'image/gif';
+    if(texto(0, 2) === 'BM') return 'image/bmp';
+    if(texto(0, 5) === '<?xml' || texto(0, 4) === '<svg') return 'image/svg+xml';
+  }catch(e){}
+  return 'application/octet-stream';
+}
+
+async function sha256Hex(buf){
+  const d = await crypto.subtle.digest('SHA-256', buf);
+  return [...new Uint8Array(d)].map(b => b.toString(16).padStart(2,'0')).join('').slice(0,32);
+}
+
+function dataURLToBlob(dataUrl){
+  const m = /^data:([^;,]+)(;base64)?,/.exec(dataUrl);
+  if(!m) return null;
+  const mime = m[1];
+  const body = dataUrl.slice(m[0].length);
+  if(m[2]){
+    const bin = atob(body);
+    const arr = new Uint8Array(bin.length);
+    for(let i=0;i<bin.length;i++) arr[i] = bin.charCodeAt(i);
+    return new Blob([arr], { type: mime });
+  }
+  return new Blob([decodeURIComponent(body)], { type: mime });
+}
+
+/* ---- compressao das imagens ----
+   Toda imagem que entra no app e reprocessada uma vez:
+     completa  -> no maximo 1080x1080, WebP qualidade 50%
+     miniatura -> no maximo 512x512,  WebP qualidade 50%
+   Como o resultado ja sai dentro do limite, reimportar o mesmo arquivo
+   nao comprime de novo (nao vai perdendo qualidade a cada volta). */
+const IMG_MAX = 1280;
+const IMG_QUALITY = 0.9;
+// a miniatura é um recorte quadrado da mesma imagem, na mesma qualidade:
+// é ela que aparece nos cards e na lista o tempo todo
+const THUMB_MAX = 600;
+const THUMB_QUALITY = 0.902;
+// só recodifica quem está realmente pesado; imagem boa e pequena passa intacta
+const RECOMPRIMIR_ACIMA_DE = 900 * 1024;
+
+function criarCanvas(w, h){
+  return (typeof OffscreenCanvas !== 'undefined')
+    ? new OffscreenCanvas(w, h)
+    : Object.assign(document.createElement('canvas'), { width: w, height: h });
+}
+
+async function canvasParaBlob(canvas, quality){
+  return canvas.convertToBlob
+    ? await canvas.convertToBlob({ type: 'image/webp', quality })
+    : await new Promise(r => canvas.toBlob(r, 'image/webp', quality));
+}
+
+/* Redimensiona e recodifica. Devolve null se nao valer a pena. */
+async function recodificar(blob, maxDim, quality, { sempre = false } = {}){
+  try{
+    const bmp = await createImageBitmap(blob);
+    const maior = Math.max(bmp.width, bmp.height);
+    const escala = Math.min(1, maxDim / maior);
+    if(!sempre && escala >= 1 && blob.size <= RECOMPRIMIR_ACIMA_DE){ bmp.close(); return null; }
+    const w = Math.max(1, Math.round(bmp.width * escala));
+    const h = Math.max(1, Math.round(bmp.height * escala));
+    const canvas = criarCanvas(w, h);
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(bmp, 0, 0, w, h);
+    bmp.close();
+    const saida = await canvasParaBlob(canvas, quality);
+    if(!saida) return null;
+    if(!sempre && saida.size >= blob.size) return null;   // ja era menor do jeito que estava
+    return saida;
+  }catch(e){
+    console.warn('Não foi possível recodificar uma imagem:', e);
+    return null;
+  }
+}
+
+/* Versão exibida nos cards, na lista e na barra lateral: recorte quadrado
+   do centro da imagem, na mesma qualidade da versão cheia. Como o app mostra
+   tudo em quadrado, cortar aqui evita reescalar na tela. */
+async function makeThumb(blob){
+  try{
+    const bmp = await createImageBitmap(blob);
+    const lado = Math.min(bmp.width, bmp.height);
+    const destino = Math.min(THUMB_MAX, lado);
+    const sx = Math.round((bmp.width - lado) / 2);
+    const sy = Math.round((bmp.height - lado) / 2);
+    const canvas = criarCanvas(destino, destino);
+    const ctx = canvas.getContext('2d');
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(bmp, sx, sy, lado, lado, 0, 0, destino, destino);
+    bmp.close();
+    return await canvasParaBlob(canvas, THUMB_QUALITY);
+  }catch(e){
+    console.warn('Não foi possível gerar a miniatura:', e);
+    return null;
+  }
+}
+
+/* Versao "completa" guardada pelo app. */
+async function comprimirCompleta(blob){
+  return await recodificar(blob, IMG_MAX, IMG_QUALITY);
+}
+
+/* Garante a miniatura de um registro ja existente (dados antigos). */
+async function ensureThumb(rec){
+  if(!rec || (rec.thumb !== undefined && rec.thumbQ === THUMB_QUALITY)) return rec;
+  const thumb = await makeThumb(rec.blob);
+  rec.thumb = thumb;
+  rec.thumbSize = thumb ? thumb.size : 0;
+  rec.thumbQ = THUMB_QUALITY;
+  await put(STORES.images, rec);
+  return rec;
+}
+
+/* Grava um Blob e devolve a referência. Imagens idênticas viram 1 só registro. */
+async function storeImageBlob(blob, readyThumb = null, { jaProcessada = false, idPronto = null } = {}){
+  // comprime antes de calcular o identificador, para que o id represente
+  // exatamente os bytes que ficam guardados.
+  // jaProcessada: veio de um .prjz gerado por este app, entao ja esta no
+  // limite de 1080/q50 — decodificar de novo so para conferir e desperdicio.
+  const comprimida = jaProcessada ? null : await comprimirCompleta(blob);
+  const final = comprimida || blob;
+  // calcular o hash custa caro; quando o id ja veio pronto do arquivo, aproveita
+  const id = (idPronto && !comprimida) ? idPronto : await sha256Hex(await final.arrayBuffer());
+  const exists = await get(STORES.images, id);
+  if(!exists){
+    const thumb = (comprimida ? null : readyThumb) || await makeThumb(final);
+    await put(STORES.images, {
+      id,
+      blob: final,
+      thumb,
+      mime: await detectarMime(final),
+      size: final.size,
+      thumbSize: thumb ? thumb.size : 0,
+      thumbQ: THUMB_QUALITY,
+      createdAt: Date.now(),
+    });
+  }
+  return idToRef(id);
+}
+async function storeImageFile(file){ return await storeImageBlob(file); }
+async function getImageRecord(id){ return await get(STORES.images, id); }
+
+/* Baixa uma imagem de um link externo e guarda os bytes aqui dentro,
+   comprimidos, do mesmo jeito que um arquivo enviado do computador. Um
+   link ao vivo (imagePath) quebra quando o site de origem troca ou some
+   com a imagem; guardando o blob agora, o produto para de depender do
+   link continuar no ar depois. Lança se o link não puder ser baixado
+   (bloqueio de CORS do site de origem, rede, ou resposta que não é
+   imagem) — quem chama decide o que fazer nesse caso. */
+async function baixarImagemDeURL(url){
+  const resp = await fetch(url, { mode: 'cors', credentials: 'omit', referrerPolicy: 'no-referrer' });
+  if(!resp.ok) throw new Error('HTTP ' + resp.status);
+  const blob = await resp.blob();
+  if(!blob || !blob.size) throw new Error('resposta vazia');
+  const mime = await detectarMime(blob);
+  if(!mime.startsWith('image/')) throw new Error('o link não devolveu uma imagem');
+  return await storeImageBlob(blob);
+}
+const ehLinkHttp = (s) => /^https?:\/\//i.test(String(s || '').trim());
+
+/* ---- cache de object URLs com teto de memória ---- */
+const IMG_BUDGET = 48 * 1024 * 1024;   // ~48 MB de imagens vivas ao mesmo tempo
+const urlCache = new Map();            // id -> { url, size, els:Set<HTMLImageElement> }
+let urlBytes = 0;
+
+function touchCache(id){
+  const e = urlCache.get(id);
+  if(!e) return e;
+  urlCache.delete(id); urlCache.set(id, e);   // move para o fim = mais recente
+  return e;
+}
+/* Uma entrada esta "em uso" enquanto algum elemento ainda no documento a
+   estiver exibindo. Despejar essas era a causa do pisca-pisca: a imagem
+   visivel perdia o src, voltava para a observacao, carregava de novo e
+   empurrava outra visivel para fora — um carrega-descarrega sem fim. */
+function entradaEmUso(key, e){
+  for(const el of e.els){
+    if(el.isConnected && el.dataset.imgId === key) return true;
+  }
+  return false;
+}
+
+function soltarEntrada(key, e){
+  URL.revokeObjectURL(e.url);
+  urlBytes -= e.size;
+  urlCache.delete(key);
+  for(const el of e.els){
+    if(el.dataset.imgId === key){
+      el.removeAttribute('src');
+      delete el.dataset.imgId;
+      if(el.isConnected) lazyObserver.observe(el);   // recarrega se voltar à tela
+    }
+  }
+}
+
+function evictImages(){
+  if(urlBytes <= IMG_BUDGET) return;
+  // 1a passada: solta so o que ninguem esta exibindo
+  for(const [key, e] of urlCache){
+    if(urlBytes <= IMG_BUDGET) return;
+    if(entradaEmUso(key, e)) continue;
+    soltarEntrada(key, e);
+  }
+  // 2a passada: so se o que esta na tela sozinho ja passou muito do teto
+  // (nao deveria acontecer; existe para a memoria nao crescer sem limite)
+  if(urlBytes <= IMG_BUDGET * 2) return;
+  for(const [key, e] of urlCache){
+    if(urlBytes <= IMG_BUDGET) return;
+    soltarEntrada(key, e);
+  }
+}
+async function acquireImageURL(id, el, { full = false } = {}){
+  const key = full ? id : id + '#t';
+  let e = touchCache(key);
+  if(!e){
+    let rec = await getImageRecord(id);
+    if(!rec || !rec.blob) return null;
+    if(!full) rec = await ensureThumb(rec);
+    const src = (!full && rec.thumb) ? rec.thumb : rec.blob;
+    e = { url: URL.createObjectURL(src), size: src.size || 0, els: new Set() };
+    urlCache.set(key, e);
+    urlBytes += e.size;
+  }
+  if(el) e.els.add(el);
+  evictImages();
+  return e.url;
+}
+
+/* ---- lazy: só carrega o que está (ou está quase) na tela ----
+   O laco antigo era sequencial: cada card esperava a ida e volta ao
+   IndexedDB do anterior. Rolando rapido, dezenas de imagens ficavam na
+   fila e o card passava segundos mostrando so o fundo. Agora as cargas
+   correm em paralelo, com um limite para nao afogar o banco. */
+const FILA_MAX = 8;
+let filaAtivas = 0;
+const filaEspera = [];
+
+function enfileirarImagem(el){
+  return new Promise(pronto => {
+    filaEspera.push({ el, pronto });
+    escoarFila();
+  });
+}
+function escoarFila(){
+  while(filaAtivas < FILA_MAX && filaEspera.length){
+    const { el, pronto } = filaEspera.shift();
+    filaAtivas++;
+    carregarImagemDoElemento(el).finally(()=>{ filaAtivas--; pronto(); escoarFila(); });
+  }
+}
+
+/* Carrega ja as fotos de um pedaco da tela, sem esperar o observador.
+   Usado na passagem de projeto: subir com o quadrado vazio e a foto
+   chegando depois e exatamente o que pisca. */
+const PRECARGA_MAX = 48;      // o suficiente para encher a area visivel
+const PRECARGA_ESPERA = 600;  // teto: a passagem nunca trava esperando
+async function precarregarImagens(raiz){
+  if(!raiz) return;
+  const alvos = [...raiz.querySelectorAll('img[data-lazy-src]:not([src])')].slice(0, PRECARGA_MAX);
+  if(!alvos.length) return;
+  alvos.forEach(im => lazyObserver.unobserve(im));
+  await Promise.race([
+    Promise.all(alvos.map(im => enfileirarImagem(im))),
+    new Promise(r => setTimeout(r, PRECARGA_ESPERA)),
+  ]);
+}
+
+async function carregarImagemDoElemento(el){
+  const src = el.dataset.lazySrc || '';
+  if(!isImageRef(src)) return;
+  const id = refToId(src);
+  const full = el.dataset.imgFull === '1';
+  try{
+    const url = await acquireImageURL(id, el, { full });
+    // o card pode ter sido reaproveitado para outro produto enquanto esperava
+    if(el.dataset.lazySrc !== src) return;
+    if(url){ el.dataset.imgId = full ? id : id + '#t'; el.src = url; }
+    else { el.classList.add('img-missing'); }
+  }catch(erro){
+    console.warn('Falha ao carregar imagem:', erro);
+    // deixa observado de novo para tentar quando voltar à tela
+    if(el.isConnected && el.dataset.lazySrc === src) lazyObserver.observe(el);
+  }
+}
+
+const lazyObserver = new IntersectionObserver((entries)=>{
+  for(const entry of entries){
+    if(!entry.isIntersecting) continue;
+    const el = entry.target;
+    lazyObserver.unobserve(el);
+    enfileirarImagem(el);
+  }
+// raiz padrão (a janela): funciona tanto para os produtos dentro do main
+// quanto para as capas da barra lateral, e já respeita o recorte de cada
+// coluna com rolagem própria.
+// A margem generosa faz a imagem chegar pronta antes de aparecer.
+}, { rootMargin: '800px 0px', threshold: 0 });
+
+/* Observar um elemento fora do documento nao rende callback quando ele e
+   inserido depois. Como os cards sao montados antes de entrar na grade,
+   a observacao espera o elemento estar no DOM. */
+function observarQuandoNoDom(el){
+  if(el.isConnected){ lazyObserver.observe(el); return; }
+  queueMicrotask(()=>{
+    if(el.isConnected) lazyObserver.observe(el);
+    else setTimeout(()=>{ if(el.isConnected) lazyObserver.observe(el); }, 0);
+  });
+}
+
+/* Ponto único por onde toda imagem passa. URL/caminho comum vai direto. */
+function setImageSource(el, src, { eager = false, full = false } = {}){
+  if(!el) return;
+  el.loading = 'lazy';
+  el.decoding = 'async';
+  if(el.dataset.imgId){
+    const prev = urlCache.get(el.dataset.imgId);
+    prev?.els.delete(el);
+    delete el.dataset.imgId;
+  }
+  lazyObserver.unobserve(el);
+  el.classList.remove('img-missing');
+  el.removeAttribute('src');
+  if(!src){ delete el.dataset.lazySrc; return; }
+  el.dataset.lazySrc = src;
+  if(full) el.dataset.imgFull = '1'; else delete el.dataset.imgFull;
+  if(!isImageRef(src)){ el.src = src; return; }
+  if(eager){
+    const id = refToId(src);
+    acquireImageURL(id, el, { full }).then(url => { if(url){ el.dataset.imgId = full ? id : id + '#t'; el.src = url; } });
+    return;
+  }
+  observarQuandoNoDom(el);
+}
+
+/* Converte um valor legado (data: URL) em referência; devolve o que já for referência/caminho. */
+async function toImageRef(value){
+  if(!value) return null;
+  if(isImageRef(value)) return value;
+  if(typeof value === 'string' && value.startsWith('data:')){
+    const blob = dataURLToBlob(value);
+    if(!blob) return null;
+    return await storeImageBlob(blob);
+  }
+  return value;
+}
+
+/* Apaga imagens que nenhum projeto/produto referencia mais. */
+async function collectGarbageImages(){
+  const used = new Set();
+  const add = (v)=>{ if(isImageRef(v)) used.add(refToId(v)); };
+  for(const p of await getAll(STORES.projects)) add(p.cover);
+  for(const pr of await getAll(STORES.products)){
+    add(pr.image);
+    for(const g of (Array.isArray(pr.gallery) ? pr.gallery : [])) add(g);
+  }
+  let removed = 0;
+  for(const rec of await getAll(STORES.images)){
+    if(!used.has(rec.id)){ await del(STORES.images, rec.id); removed++; }
+  }
+  return removed;
+}
+
+/* Recomprime imagens que foram guardadas antes desta regra existir.
+   Mantem o mesmo id para nao precisar reescrever as referencias. */
+async function migrateCompressImages(onProgress){
+  const todas = await getAll(STORES.images);
+  const pendentes = todas.filter(r => r.blob && (r.size > RECOMPRIMIR_ACIMA_DE || r.thumb === undefined || r.thumb === null));
+  if(!pendentes.length) return { convertidas: 0, antesMB: 0, depoisMB: 0 };
+  let feitas = 0, antes = 0, depois = 0;
+  for(const rec of pendentes){
+    const original = rec.blob;
+    const nova = await comprimirCompleta(original);
+    if(nova){
+      antes += original.size;
+      depois += nova.size;
+      rec.blob = nova;
+      rec.mime = nova.type || 'image/webp';
+      rec.size = nova.size;
+      rec.thumb = undefined;            // refaz a miniatura a partir da nova
+    }
+    if(rec.thumb === undefined || rec.thumb === null){
+      const t = await makeThumb(rec.blob);
+      rec.thumb = t;
+      rec.thumbSize = t ? t.size : 0;
+    }
+    await put(STORES.images, rec);
+    onProgress?.(++feitas, pendentes.length);
+    await uiTick();
+  }
+  return {
+    convertidas: feitas,
+    antesMB: +(antes / 1048576).toFixed(1),
+    depoisMB: +(depois / 1048576).toFixed(1),
+  };
+}
+
+/* Migração única: tira o base64 de dentro dos registros e joga no store de imagens. */
+async function migrateInlineImages(onProgress){
+  const projetos = await getAll(STORES.projects);
+  const produtos = await getAll(STORES.products);
+  const ehBase64 = (v)=> typeof v === 'string' && v.startsWith('data:');
+  const pend = projetos.filter(p => ehBase64(p.cover)).length
+    + produtos.filter(pr => ehBase64(pr.image)
+        || (Array.isArray(pr.gallery) && pr.gallery.some(ehBase64))).length;
+  if(!pend) return 0;
+  let feitos = 0;
+  let changed = 0;
+  for(const p of projetos){
+    if(typeof p.cover === 'string' && p.cover.startsWith('data:')){
+      p.cover = await toImageRef(p.cover);
+      await put(STORES.projects, p); changed++;
+      onProgress?.(++feitos, pend);
+      await uiTick();
+    }
+  }
+  for(const pr of produtos){
+    let dirty = false;
+    if(typeof pr.image === 'string' && pr.image.startsWith('data:')){ pr.image = await toImageRef(pr.image); dirty = true; }
+    if(Array.isArray(pr.gallery)){
+      const next = [];
+      for(const g of pr.gallery){
+        if(typeof g === 'string' && g.startsWith('data:')){ next.push(await toImageRef(g)); dirty = true; }
+        else next.push(g);
+      }
+      if(dirty) pr.gallery = next;
+    }
+    if(dirty){
+      await put(STORES.products, pr); changed++;
+      onProgress?.(++feitos, pend);
+      await uiTick();
+    }
+  }
+  return changed;
+}
+
+const id = () => crypto.randomUUID();
+const nowStamp = () => {
+  const d = new Date();
+  const p = (n) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}`;
+};
+const safeName = (s='arquivo') => s
+  .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+  .replace(/[^a-zA-Z0-9 _.-]+/g,'')
+  .trim().replace(/\s+/g,' ') || 'arquivo';
+// o formatador usa espaco fixo (NBSP) depois do R$; a regex cobre os dois casos
+const SEM_MOEDA = /^R\$\s*/u;
+const sum = (arr) => arr.reduce((a,x)=> a + (Number(x.price) || 0), 0);
+const escapeHTML = (s='') => String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
+const normalizePath = (s='') => String(s).trim();
+const parseLines = (s='') => String(s).split(/\r?\n|,/).map(x => x.trim()).filter(Boolean);
+const byOrder = (a,b) => ((a.order ?? 999999) - (b.order ?? 999999)) || (a.name || '').localeCompare(b.name || '');
+const byProductOrder = (a,b) => ((a.order ?? 999999) - (b.order ?? 999999)) || (a.name || '').localeCompare(b.name || '');
+
+async function readFileAsDataURL(file){
+  return await new Promise((res,rej)=>{
+    const r = new FileReader();
+    r.onload = ()=> res(r.result);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+}
+
+function resolveMainImage(prod){
+  return prod?.image || normalizePath(prod?.imagePath || '');
+}
+function resolveGallery(prod){
+  // a principal abre o carrossel; a galeria vem depois, sem repetir
+  const vistos = new Set();
+  const arr = [];
+  const juntar = (v)=>{
+    if(!v || vistos.has(v)) return;
+    vistos.add(v);
+    arr.push(v);
+  };
+  juntar(resolveMainImage(prod));
+  for(const item of (Array.isArray(prod?.gallery) ? prod.gallery : [])) juntar(normalizePath(item));
+  return arr;
+}
+
+function setView(v){
+  state.currentView = v;
+  viewProjects.classList.toggle('hidden', v !== 'projects');
+  viewProject.classList.toggle('hidden', v !== 'project');
+  viewAll.classList.toggle('hidden', v !== 'all');
+  btnNewProduct.disabled = v !== 'project';
+  btnBack.innerHTML = v === 'projects' ? '' : '<button class="btn">← Voltar</button>';
+}
+
+
+
+async function ensureProjectOrder(){
+  const projects = await getAll(STORES.projects);
+  let changed = false;
+  const ordered = [...projects].sort(byOrder);
+  for(let i=0;i<ordered.length;i++){
+    if(ordered[i].order !== i){
+      ordered[i].order = i;
+      await put(STORES.projects, ordered[i]);
+      changed = true;
+    }
+  }
+  return changed;
+}
+
+async function ensureProductOrder(projectId){
+  const products = (await getProductsByProject(projectId)).sort(byProductOrder);
+  let changed = false;
+  for(let i=0;i<products.length;i++){
+    if(products[i].order !== i){
+      products[i].order = i;
+      await put(STORES.products, products[i]);
+      changed = true;
+    }
+  }
+  return changed;
+}
+
+async function fillProjectSelect(selectedId = null){
+  const projects = (await getAll(STORES.projects)).sort(byOrder);
+  if(!projects.length){
+    prodProject.innerHTML = '';
+    alert('Crie um projeto antes de adicionar produtos.');
+    return false;
+  }
+  prodProject.innerHTML = projects.map(p => `<option value="${p.id}">${escapeHTML(p.name)}</option>`).join('');
+  const target = selectedId || state.currentProjectId || projects[0].id;
+  if(projects.some(p => p.id === target)) prodProject.value = target;
+  return true;
+}
+
+async function refreshSidebar(){
+  const projects = (await getAll(STORES.projects)).sort(byOrder);
+  const rows = await Promise.all(projects.map(async p => ({ ...p, total: sum(await getProductsByProject(p.id)) })));
+  projectList.innerHTML = '';
+  rows.forEach((p) => {
+    const li = document.createElement('li');
+    li.draggable = true;
+    li.dataset.id = p.id;
+    li.innerHTML = `<span class="drag-handle" title="Arrastar">⋮⋮</span><div class="pcover">${p.cover ? '<img class="side-cover" alt="">' : ''}</div><div class="pname">${escapeHTML(p.name)}</div>`;
+    li.classList.toggle('ativo', p.id === state.currentProjectId);
+    setImageSource(li.querySelector('.side-cover'), p.cover);
+    li.addEventListener('click', (e)=>{
+      if(e.target.closest('.drag-handle')) return;
+      openProject(p.id);
+    });
+    li.dataset.sortableItem = 'project';
+    li.addEventListener('dragstart', (e)=> startSortableDrag(e, li, projectList, { type:'project-sidebar', id:p.id }));
+    li.addEventListener('dragend', ()=> cancelSortableDrag());
+    projectList.appendChild(li);
+  });
+}
+
+async function reorderProjects(dragId, targetId){
+  const projects = (await getAll(STORES.projects)).sort(byOrder);
+  const from = projects.findIndex(p => p.id === dragId);
+  const to = projects.findIndex(p => p.id === targetId);
+  if(from < 0 || to < 0 || from === to) return;
+  const [moved] = projects.splice(from, 1);
+  projects.splice(to, 0, moved);
+  for(let i=0;i<projects.length;i++){
+    projects[i].order = i;
+    await put(STORES.projects, projects[i]);
+  }
+  await rerenderCurrentView();
+}
+
+async function deleteProjectCascade(projectId){
+  const prods = await getProductsByProject(projectId);
+  for(const pr of prods) await del(STORES.products, pr.id);
+  await del(STORES.projects, projectId);
+}
+
+/* ============================================================
+   BUSCA  —  procura em tudo que está escrito, não só no nome.
+   Acento e maiúscula não atrapalham, e várias palavras somam:
+   "mesa branca" só acha o que tem as duas.
+   ============================================================ */
+function semAcento(t){
+  return (t ?? '').toString().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+}
+
+/* Devolve a lista de palavras procuradas; lista vazia = sem filtro. */
+function normalizarBusca(t){
+  return semAcento(t).trim().split(/\s+/).filter(Boolean);
+}
+
+function combinaComBusca(termos, ...campos){
+  if(!termos.length) return true;
+  const texto = semAcento(campos.filter(Boolean).join(' '));
+  return termos.every(t => texto.includes(t));
+}
+
+function escaparRegex(t){ return t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+/* No nome, a palavra procurada vale como começo de palavra: "mac" acha
+   "MacBook" e "Mac mini". */
+function comecaPalavra(texto, termo){
+  return new RegExp('(^|[^a-z0-9])' + escaparRegex(termo)).test(texto);
+}
+
+/* Na descrição é preciso ser a palavra inteira: "mac" acha "mac", mas
+   não acha "macio" — era daí que vinha resultado sem nada a ver. */
+function palavraInteira(texto, termo){
+  return new RegExp('(^|[^a-z0-9])' + escaparRegex(termo) + '([^a-z0-9]|$)').test(texto);
+}
+
+/* Nome e termo de pesquisa mandam; descrição e frequência entram, mas
+   só quando a palavra aparece inteira. */
+function produtoCombina(pr, termos){
+  if(!termos.length) return true;
+  const forte = semAcento([pr.name, pr.search].filter(Boolean).join(' '));
+  const fraco = semAcento([pr.description, rotuloFrequencia(pr.frequency)].filter(Boolean).join(' '));
+  return termos.every(t => comecaPalavra(forte, t) || palavraInteira(fraco, t));
+}
+
+/* Serve para pôr na frente quem casa pelo nome. */
+function produtoCombinaNome(pr, termos){
+  const nome = semAcento(pr.name);
+  return termos.every(t => comecaPalavra(nome, t));
+}
+
+function makeProjectCard(p){
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.dataset.id = p.id;
+  const pDesc = (p.description || '').trim();
+  const pShort = pDesc.length > 127 ? pDesc.substring(0,127) + '…' : pDesc;
+  card.innerHTML = `
+    <a href="#" class="proj-open" data-id="${p.id}" style="color:inherit;text-decoration:none">
+      <div class="thumb">${p.cover ? '<img class="proj-thumb" alt=""/>' : 'Sem capa'}</div>
+    </a>
+    <div class="content">
+      <div class="row" style="margin:0 0 10px 0; justify-content:flex-start; gap:10px;">
+        <h2 style="margin:0"><a href="#" class="proj-open" data-id="${p.id}" style="color:inherit;text-decoration:none">${escapeHTML(p.name)}</a></h2>
+      </div>
+      <div class="muted">${escapeHTML(pShort)}</div>
+      <div class="row" style="margin-top:10px">
+        <span class="price"><small>R$</small>${fmt.format(p.total).replace(SEM_MOEDA, '')}</span>
+        <div class="icons">
+          <button class="icon-mini" title="Editar" data-act="edit"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg></button>
+          <button class="icon-mini" title="Excluir" data-act="del" style="color:#ff9aa9;border-color:#51222a"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+        </div>
+      </div>
+    </div>`;
+  setImageSource(card.querySelector('.proj-thumb'), p.cover);
+  card.querySelectorAll('.proj-open').forEach(a=> a.addEventListener('click', (e)=>{ e.preventDefault(); openProject(p.id); }));
+  card.querySelector('[data-act="edit"]').addEventListener('click', ()=> openProjectModal(p.id));
+  card.querySelector('[data-act="del"]').addEventListener('click', async ()=>{
+    if(confirm('Excluir este projeto e seus produtos?')){
+      await deleteProjectCascade(p.id);
+      if(state.currentProjectId === p.id) state.currentProjectId = null;
+      await rerenderCurrentView();
+    }
+  });
+  // a grade da página inicial não se reordena por arrasto: a ordem dos
+  // projetos se muda pela barra lateral, que continua arrastável
+  return card;
+}
+
+async function renderProjects(){
+  setView('projects');
+  const q = normalizarBusca(searchProjects.value);
+  const projects = (await getAll(STORES.projects)).sort(byOrder);
+  const items = await Promise.all(projects.map(async p => {
+    const prods = (await getProductsByProject(p.id)).sort(byProductOrder);
+    return { ...p, total: sum(prods), cover: p.cover || resolveMainImage(prods[0]) || null, prods };
+  }));
+  projectsGrid.innerHTML = '';
+
+  // com algo escrito na busca, a grade mostra PRODUTOS — de todos os
+  // projetos, procurando em tudo que está escrito neles. Com a busca
+  // vazia, volta a ser a grade de projetos.
+  if(q.length){
+    projectsGrid.className = 'cards products' + (state.layoutProdutos === 'lista' ? ' lista' : '');
+    const achados = [];
+    for(const p of items){
+      for(const pr of p.prods){
+        if(estaArquivado(pr)) continue;
+        // o nome do projeto NÃO entra: senão um projeto chamado "Mac"
+        // trazia junto tudo que está dentro dele
+        if(produtoCombina(pr, q)) achados.push({ prod: pr, nome: p.name, pid: p.id });
+      }
+    }
+    // quem casa pelo nome aparece primeiro
+    achados.sort((a,b)=> (produtoCombinaNome(b.prod, q) ? 1 : 0) - (produtoCombinaNome(a.prod, q) ? 1 : 0));
+    projectsEmpty.style.display = achados.length ? 'none' : 'block';
+    if(!achados.length) projectsEmpty.textContent = 'Nenhum produto encontrado.';
+    allValue.textContent = fmt.format(sum(achados.map(a => a.prod)));
+    achados.forEach(a => projectsGrid.appendChild(makeProductCard(a.prod, a.nome, a.pid)));
+    return;
+  }
+
+  projectsGrid.className = 'cards';
+  projectsEmpty.style.display = items.length ? 'none' : 'block';
+  // o rótulo agora está no HTML, ao lado; aqui vai só o número
+  allValue.textContent = fmt.format(items.reduce((a,b)=> a + b.total, 0));
+  items.forEach(p => projectsGrid.appendChild(makeProjectCard(p)));
+}
+
+/* Só o conteúdo rola. A barra com nome, total e ícones fica fora da
+   área de rolagem — não é conteúdo, e por isso não sobe nem desce nem
+   passa por baixo de nada. */
+const areaProdutos = document.querySelector('#viewProject .view-corpo');
+const palcoProjeto = document.querySelector('#viewProject .view-area');
+
+/* ---- rolagem contínua ----
+   Todos os projetos ficam um embaixo do outro na mesma rolagem. Chegar
+   ao fim de um e continuar rolando entra no seguinte, sem animação,
+   sem troca de tela, sem nada travando a roda: é a rolagem do próprio
+   navegador. A barra do topo só acompanha, mostrando o nome e o total
+   do projeto que está à vista. */
+
+function blocoEmFoco(){
+  // um pouco abaixo da borda de cima: é "o projeto que está à vista"
+  const limite = areaProdutos.getBoundingClientRect().top + 40;
+  const blocos = [...productsGrid.querySelectorAll('.bloco-projeto')];
+  let atual = blocos[0] || null;
+  for(const b of blocos){
+    if(b.getBoundingClientRect().top <= limite) atual = b;
+    else break;
+  }
+  return atual;
+}
+
+let focoAgendado = null;
+function acompanharRolagem(){
+  if(focoAgendado) return;
+  focoAgendado = setTimeout(()=>{
+    focoAgendado = null;
+    if(state.currentView !== 'project') return;
+    const bloco = blocoEmFoco();
+    if(!bloco || bloco.dataset.projeto === state.currentProjectId) return;
+    state.currentProjectId = bloco.dataset.projeto;
+    projectTitle.textContent = bloco.dataset.nome || 'Projeto';
+    projectTotal.textContent = 'Total do Projeto: ' + bloco.dataset.total;
+    marcarProjetoNaLateral();
+  }, 60);
+}
+
+areaProdutos.addEventListener('scroll', acompanharRolagem, { passive: true });
+
+/* Leva o projeto pedido para o alto da área, sem animação. */
+function irParaBloco(projectId){
+  const bloco = productsGrid.querySelector(`.bloco-projeto[data-projeto="${projectId}"]`);
+  if(!bloco) return;
+  areaProdutos.scrollTop += bloco.getBoundingClientRect().top
+    - areaProdutos.getBoundingClientRect().top - 16;
+}
+
+function marcarProjetoNaLateral(){
+  for(const li of projectList.querySelectorAll('li[data-id]')){
+    li.classList.toggle('ativo', li.dataset.id === state.currentProjectId);
+  }
+}
+
+async function openProject(projectId){
+  state.currentProjectId = projectId;
+  const p = await get(STORES.projects, projectId);
+  projectTitle.textContent = p?.name || 'Projeto';
+  setView('project');
+  await renderProjectProducts();
+  irParaBloco(projectId);
+  marcarProjetoNaLateral();
+}
+
+/* O card da grade mostra so a primeira imagem, sem setas.
+   As demais aparecem na pagina do produto. */
+function createCarousel(container, images, alt=''){
+  container.innerHTML = '';
+  const items = images.filter(Boolean);
+  if(!items.length){
+    container.textContent = 'Sem imagem';
+    return;
+  }
+  const img = document.createElement('img');
+  // sem texto alternativo: o nome ja aparece ao lado e o alt poluiria a
+  // miniatura enquanto a imagem nao carrega
+  img.alt = '';
+  container.appendChild(img);
+  setImageSource(img, items[0]);
+}
+
+function makeProductCard(prod, projectName='', pid='', gradeDono=null){
+  const card = document.createElement('div');
+  card.className = 'product';
+  card.dataset.id = prod.id;
+  card.draggable = state.currentView === 'project';
+  const d = (prod.description || '').trim();
+  const dShort = d.length > 127 ? d.substring(0,127) + '…' : d;
+  card.innerHTML = `
+    <div class="pic"></div>
+    <div class="sobre">
+      <h4>${escapeHTML(prod.name || 'Sem nome')}</h4>
+      <div class="freq">${escapeHTML(rotuloFrequencia(prod.frequency) || 'Sem frequência')}</div>
+      <div class="linha">
+        <div class="price"><small>R$</small>${fmt.format(Number(prod.price||0)).replace(SEM_MOEDA, '')}</div>
+        <div class="icons">
+          <button class="icon-mini" title="Editar" data-act="edit"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg></button>
+          <button class="icon-mini" title="Pesquisar no Google" data-act="google"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button>
+          ${prod.link ? `<a class="icon-mini" title="Abrir link" href="${prod.link}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 1 1-8 0"/></svg></a>` : ''}
+          <button class="icon-mini" title="Excluir" data-act="del" style="color:#ff9aa9"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+        </div>
+      </div>
+    </div>`;
+  createCarousel(card.querySelector('.pic'), resolveGallery(prod), prod.name || '');
+  // o card inteiro abre a página do produto, menos os ícones de ação
+  card.addEventListener('click', (e)=>{
+    if(e.target.closest('.icon-mini')) return;
+    abrirFicha(prod.id);
+  });
+  card.querySelector('[data-act="edit"]').addEventListener('click', ()=> openProductModal(prod.id));
+  card.querySelector('[data-act="google"]').addEventListener('click', ()=>{
+    const q = (prod.search || prod.name || '').trim();
+    if(q) window.open('https://www.google.com/search?q=' + encodeURIComponent(q), '_blank');
+  });
+  card.querySelector('[data-act="del"]').addEventListener('click', async ()=>{
+    if(confirm('Excluir este produto?')){
+      const pidDel = prod.projectId;
+      await del(STORES.products, prod.id);
+      await ensureProductOrder(pidDel);
+      await rerenderCurrentView();
+    }
+  });
+
+  if(state.currentView === 'project'){
+    // dragover/drop ficam no container: o pontilhado tambem precisa aceitar
+    // a soltura, e ele nao e um cartao. Sem isso, soltar em cima do
+    // pontilhado cancelava o arrasto e o item voltava para o lugar antigo.
+    card.dataset.sortableItem = 'product';
+    card.addEventListener('dragstart', (e)=> startSortableDrag(e, card, gradeDono || productsGrid, { type:'product', id:prod.id, projectId:prod.projectId }));
+    card.addEventListener('dragend', ()=> cancelSortableDrag());
+  }
+  return card;
+}
+
+async function reorderProducts(projectId, dragId, targetId){
+  const products = (await getProductsByProject(projectId)).sort(byProductOrder);
+  const from = products.findIndex(p => p.id === dragId);
+  const to = products.findIndex(p => p.id === targetId);
+  if(from < 0 || to < 0 || from === to) return;
+  const [moved] = products.splice(from, 1);
+  products.splice(to, 0, moved);
+  for(let i=0;i<products.length;i++){
+    products[i].order = i;
+    await put(STORES.products, products[i]);
+  }
+  await rerenderCurrentView();
+}
+
+/* Monta TODOS os projetos, um embaixo do outro, na mesma rolagem. */
+async function renderProjectProducts(){
+  const projetos = (await getAll(STORES.projects)).sort(byOrder);
+  // redesenhar (salvar um produto, apagar, reordenar) não pode jogar a
+  // pessoa de volta para o começo da lista
+  const rolagemAntes = areaProdutos.scrollTop;
+  productsGrid.className = 'fluxo-projetos';
+  productsGrid.innerHTML = '';
+
+  for(const p of projetos){
+    const produtos = (await getProductsByProject(p.id)).sort(byProductOrder);
+    const total = fmt.format(sum(produtos));
+
+    const bloco = document.createElement('section');
+    bloco.className = 'bloco-projeto';
+    bloco.dataset.projeto = p.id;
+    bloco.dataset.nome = p.name || 'Projeto';
+    bloco.dataset.total = total;
+
+    const titulo = document.createElement('div');
+    titulo.className = 'bloco-titulo';
+    titulo.innerHTML = `<h2>${escapeHTML(p.name || 'Projeto')}</h2>` +
+                       `<span class="bloco-total">${escapeHTML(total)}</span>`;
+
+    const grade = document.createElement('div');
+    grade.className = 'cards products' + (state.layoutProdutos === 'lista' ? ' lista' : '');
+    grade.dataset.projeto = p.id;
+    produtos.forEach(prod => grade.appendChild(makeProductCard(prod, p.name || '', p.id, grade)));
+
+    if(!produtos.length){
+      const vazio = document.createElement('div');
+      vazio.className = 'muted';
+      vazio.textContent = 'Sem produtos neste projeto.';
+      bloco.append(titulo, grade, vazio);
+    } else {
+      bloco.append(titulo, grade);
+    }
+    productsGrid.appendChild(bloco);
+  }
+
+  productsEmpty.style.display = projetos.length ? 'none' : 'block';
+  if(rolagemAntes) areaProdutos.scrollTop = rolagemAntes;
+  const atual = projetos.find(p => p.id === state.currentProjectId) || projetos[0];
+  if(atual){
+    projectTitle.textContent = atual.name || 'Projeto';
+    const bloco = productsGrid.querySelector(`.bloco-projeto[data-projeto="${atual.id}"]`);
+    projectTotal.textContent = 'Total do Projeto: ' + (bloco?.dataset.total || fmt.format(0));
+  }
+}
+
+async function renderAll(){
+  setView('all');
+  const q = normalizarBusca(searchAll.value);
+  const projects = (await getAll(STORES.projects)).sort(byOrder);
+  const prods = (await getAll(STORES.products)).filter(p => !estaArquivado(p));
+  const projMap = new Map(projects.map(p => [p.id, p]));
+  const filtered = prods
+    .map(pr => ({ ...pr, projectName: projMap.get(pr.projectId)?.name || '', pid: pr.projectId, projectOrder: projMap.get(pr.projectId)?.order ?? 999999 }))
+    .filter(pr => produtoCombina(pr, q) || combinaComBusca(q, pr.projectName))
+    .sort((a,b) => (a.projectOrder - b.projectOrder) || byProductOrder(a,b));
+  allGrid.innerHTML = '';
+  allEmpty.style.display = filtered.length ? 'none' : 'block';
+  filtered.forEach(prod => allGrid.appendChild(makeProductCard(prod, prod.projectName, prod.pid)));
+}
+
+/* Área de upload reutilizada tanto quando não há imagem quanto quando a
+   imagem escolhida quebrou: nos dois casos a pessoa precisa poder trocar
+   por um arquivo ou por outro link sem ficar travada numa mensagem morta. */
+function criarZonaUpload(mensagemErro = ''){
+  const zona = document.createElement('div');
+  zona.className = 'zona-upload';
+  if(mensagemErro){
+    const erro = document.createElement('div');
+    erro.className = 'zona-upload-erro';
+    erro.textContent = mensagemErro;
+    zona.appendChild(erro);
+  }
+  const botao = document.createElement('button');
+  botao.type = 'button';
+  botao.className = 'btn brand';
+  botao.textContent = 'Carregar imagem';
+  botao.addEventListener('click', ()=> prodImage.click());
+  const dica = document.createElement('div');
+  dica.className = 'dica';
+  dica.textContent = 'ou informe um caminho/link';
+  const caminho = document.createElement('input');
+  caminho.type = 'text';
+  caminho.placeholder = 'img-produto.jpg';
+  caminho.value = prodImagePath.value || '';
+  caminho.addEventListener('input', ()=>{ prodImagePath.value = caminho.value; });
+  caminho.addEventListener('change', async ()=>{
+    if(caminho.value.trim()){ prodImage.value = ''; await refreshEditorPreviews(state.editProductId ? await get(STORES.products, state.editProductId) : null); }
+  });
+  zona.append(botao, dica, caminho);
+  return zona;
+}
+
+function renderEditorMainImage(src){
+  imagePreview.innerHTML = '';
+
+  if(!src){
+    // sem imagem: a própria moldura vira a área de upload
+    imagePreview.appendChild(criarZonaUpload());
+    return;
+  }
+
+  const img = new Image();
+  img.alt = 'Imagem principal';
+  setImageSource(img, src, { eager: true, full: true });
+  img.onerror = ()=>{
+    // imagem quebrada: nada de mensagem sem saída — a mesma área de troca
+    // fica no lugar, com o link atual pré-preenchido para editar ou substituir.
+    imagePreview.innerHTML = '';
+    imagePreview.appendChild(criarZonaUpload('Não foi possível abrir esta imagem. Envie um arquivo ou informe outro link.'));
+  };
+  imagePreview.appendChild(img);
+
+  const lixeira = document.createElement('button');
+  lixeira.type = 'button';
+  lixeira.className = 'apagar-foto';
+  lixeira.title = 'Remover a imagem principal';
+  lixeira.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>';
+  lixeira.addEventListener('click', ()=>{
+    state.imagemRemovida = true;
+    prodImage.value = '';
+    prodImagePath.value = '';
+    renderEditorMainImage('');
+  });
+  imagePreview.appendChild(lixeira);
+}
+
+function renderEditorGallery(){
+  const itens = state.editGallery.filter(Boolean);
+  galleryPreview.innerHTML = '';
+  galeriaContador.textContent = itens.length
+    ? itens.length + (itens.length === 1 ? ' imagem' : ' imagens')
+    : 'nenhuma imagem';
+
+  if(!itens.length){
+    const vazio = document.createElement('div');
+    vazio.className = 'galeria-vazia';
+    vazio.textContent = 'Nenhuma imagem na galeria. Use o botão acima para adicionar.';
+    galleryPreview.appendChild(vazio);
+    return;
+  }
+
+  itens.forEach((src, i)=>{
+    const wrap = document.createElement('div');
+    wrap.className = 'gallery-item';
+    wrap.draggable = true;
+    wrap.dataset.indice = String(i);
+
+    const img = new Image();
+    img.alt = 'Imagem ' + (i + 1) + ' da galeria';
+    setImageSource(img, src, { eager: true });
+    img.onerror = ()=> { img.classList.add('img-missing'); wrap.title = 'Não foi possível abrir: ' + src; };
+    wrap.appendChild(img);
+
+    const ordem = document.createElement('span');
+    ordem.className = 'ordem';
+    ordem.textContent = String(i + 1);
+    wrap.appendChild(ordem);
+
+    const remover = document.createElement('button');
+    remover.type = 'button';
+    remover.className = 'remover';
+    remover.title = 'Remover da galeria';
+    remover.textContent = '×';
+    remover.addEventListener('click', ()=>{
+      state.editGallery.splice(i, 1);
+      renderEditorGallery();
+    });
+    wrap.appendChild(remover);
+
+    // arrastar para reordenar
+    wrap.addEventListener('dragstart', (e)=>{
+      e.dataTransfer.setData('text/plain', String(i));
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    wrap.addEventListener('dragover', (e)=>{ e.preventDefault(); e.dataTransfer.dropEffect = 'move'; });
+    wrap.addEventListener('drop', (e)=>{
+      e.preventDefault();
+      const de = Number(e.dataTransfer.getData('text/plain'));
+      const para = Number(wrap.dataset.indice);
+      if(Number.isNaN(de) || de === para) return;
+      const [movido] = state.editGallery.splice(de, 1);
+      state.editGallery.splice(para, 0, movido);
+      renderEditorGallery();
+    });
+
+    galleryPreview.appendChild(wrap);
+  });
+}
+
+/* Adiciona arquivos escolhidos pelo usuário à galeria em edição. */
+async function adicionarArquivosNaGaleria(arquivos){
+  let lista = [...(arquivos || [])].filter(f => f && f.type.startsWith('image/'));
+  if(!lista.length) return;
+  // a principal também conta para o teto
+  const vagas = GALERIA_MAX - 1 - state.editGallery.length;
+  if(vagas <= 0){
+    alert('A galeria já está no limite de ' + (GALERIA_MAX - 1) + ' imagens além da principal.');
+    return;
+  }
+  if(lista.length > vagas){
+    alert('Cabem mais ' + vagas + ' imagem(ns). As demais foram ignoradas.');
+    lista = lista.slice(0, vagas);
+  }
+  progressShow('Processando imagens…', 'Compactando para a galeria');
+  await uiTick(true);
+  try{
+    let i = 0;
+    for(const arquivo of lista){
+      progressSet(++i, lista.length, 'Compactando: ' + arquivo.name);
+      await uiTick();
+      state.editGallery.push(await storeImageFile(arquivo));
+    }
+    renderEditorGallery();
+    progressHide();
+  }catch(e){
+    console.error(e);
+    progressError('Falha ao adicionar imagens',
+      '<b>Não foi possível processar as imagens escolhidas.</b>' +
+      '<div style="margin-top:10px;opacity:.75;font-size:12px">Detalhe técnico: ' +
+      escapeHTML(String(e && e.message ? e.message : e)) + '</div>');
+  }
+}
+
+function currentMainImageCandidate(){
+  const file = prodImage.files && prodImage.files[0];
+  if(file) return { type: 'file', file };
+  const path = normalizePath(prodImagePath.value);
+  if(path) return { type: 'path', path };
+  return null;
+}
+
+async function refreshEditorPreviews(existing = null){
+  const candidate = currentMainImageCandidate();
+  if(candidate?.type === 'file'){
+    const dataUrl = await readFileAsDataURL(candidate.file);
+    renderEditorMainImage(dataUrl);
+  }else if(candidate?.type === 'path'){
+    renderEditorMainImage(candidate.path);
+  }else if(existing && !state.imagemRemovida){
+    renderEditorMainImage(resolveMainImage(existing));
+  }else{
+    renderEditorMainImage('');
+  }
+  renderEditorGallery();
+}
+
+async function openProjectModal(editId=null){
+  state.editProjectId = editId;
+  el('#modalProjectTitle').textContent = editId ? 'Editar Projeto' : 'Novo Projeto';
+  projName.value = '';
+  projDesc.value = '';
+  projCover.value = '';
+  projCoverPreview.innerHTML = '';
+  if(editId){
+    const p = await get(STORES.projects, editId);
+    projName.value = p?.name || '';
+    projDesc.value = p?.description || '';
+    if(p?.cover){
+      const img = new Image();
+      setImageSource(img, p.cover, { eager: true, full: true });
+      img.style.maxHeight = '100px';
+      img.style.border = '1px solid var(--border)';
+      img.style.borderRadius = '8px';
+      projCoverPreview.appendChild(img);
+    }
+  }
+  await renderArquivados(editId);
+  modalProject.showModal();
+}
+
+async function saveProject(){
+  const name = (projName.value || '').trim();
+  if(!name) return alert('Informe o nome do projeto');
+  const currentViewBefore = state.currentView;
+  const now = Date.now();
+  let cover = null;
+  if(projCover.files && projCover.files[0]) cover = await storeImageFile(projCover.files[0]);
+  let savedProjectId = state.currentProjectId;
+  if(state.editProjectId){
+    const p = await get(STORES.projects, state.editProjectId);
+    await put(STORES.projects, { ...p, name, description: (projDesc.value || '').trim(), cover: cover || p.cover || null, updatedAt: now });
+    savedProjectId = p.id;
+  } else {
+    const allProjects = (await getAll(STORES.projects)).sort(byOrder);
+    const newProject = { id: id(), name, description: (projDesc.value || '').trim(), cover, createdAt: now, updatedAt: now, order: allProjects.length };
+    await put(STORES.projects, newProject);
+    savedProjectId = newProject.id;
+  }
+  modalProject.close();
+  state.currentProjectId = savedProjectId;
+  await rerenderCurrentView(currentViewBefore);
+}
+
+async function arquivarProduto(produtoId){
+  const pr = await get(STORES.products, produtoId);
+  if(!pr) return;
+  await put(STORES.products, { ...pr, archived: true, updatedAt: Date.now() });
+  await ensureProductOrder(pr.projectId);
+}
+
+async function desarquivarProduto(produtoId){
+  const pr = await get(STORES.products, produtoId);
+  if(!pr) return;
+  const ativos = await getProductsByProject(pr.projectId);
+  await put(STORES.products, { ...pr, archived: false, order: ativos.length, updatedAt: Date.now() });
+  await ensureProductOrder(pr.projectId);
+}
+
+/* Lista os arquivados do projeto no rodapé do editor de projeto. */
+async function renderArquivados(projectId){
+  if(!projectId){ arquivadosBloco.hidden = true; return; }
+  const todos = await getProductsByProject(projectId, { incluirArquivados: true });
+  const arquivados = todos.filter(estaArquivado);
+  arquivadosBloco.hidden = !arquivados.length;
+  arquivadosContador.textContent = arquivados.length ? '(' + arquivados.length + ')' : '';
+  arquivadosLista.innerHTML = '';
+
+  for(const pr of arquivados){
+    const linha = document.createElement('div');
+    linha.className = 'arquivado';
+
+    const foto = document.createElement('div');
+    foto.className = 'arquivado-foto';
+    const img = new Image();
+    img.alt = '';
+    setImageSource(img, resolveGallery(pr)[0] || null, { eager: true });
+    foto.appendChild(img);
+
+    const nome = document.createElement('div');
+    nome.className = 'arquivado-nome';
+    nome.textContent = pr.name || 'Sem nome';
+
+    const preco = document.createElement('div');
+    preco.className = 'arquivado-preco';
+    preco.textContent = fmt.format(Number(pr.price || 0));
+
+    const botao = document.createElement('button');
+    botao.type = 'button';
+    botao.className = 'btn';
+    botao.textContent = 'Desarquivar';
+    botao.addEventListener('click', async ()=>{
+      await desarquivarProduto(pr.id);
+      await renderArquivados(projectId);
+      await rerenderCurrentView();
+    });
+
+    linha.append(foto, nome, preco, botao);
+    arquivadosLista.appendChild(linha);
+  }
+}
+
+async function deleteCurrentProject(){
+  if(!state.currentProjectId) return;
+  const p = await get(STORES.projects, state.currentProjectId);
+  if(!p) return;
+  if(confirm(`Excluir o projeto "${p.name}" e todos os seus produtos?`)){
+    await deleteProjectCascade(p.id);
+    state.currentProjectId = null;
+    await rerenderCurrentView('projects');
+  }
+}
+
+/* A ordem para "anterior/próximo" vem da tela: respeita busca, ordenação
+   manual e a aba em que o produto foi aberto. */
+async function listaParaEdicao(editId){
+  const naTela = listaDeProdutosNaTela();
+  if(naTela.includes(editId)) return naTela;
+  const pr = await get(STORES.products, editId);
+  if(!pr) return [editId];
+  const irmaos = (await getProductsByProject(pr.projectId)).sort(byProductOrder);
+  return irmaos.map(p => p.id);
+}
+
+async function openProductModal(editId = null, { manterLista = false } = {}){
+  state.editProductId = editId;
+  if(editId && !manterLista){
+    state.editLista = await listaParaEdicao(editId);
+    state.editPos = state.editLista.indexOf(editId);
+  } else if(!editId){
+    state.editLista = [];
+    state.editPos = -1;
+  }
+  el('#modalProductTitle').textContent = editId ? 'Editar Produto' : 'Novo Produto';
+  prodName.value = '';
+  prodDesc.value = '';
+  prodPrice.value = '';
+  prodLink.value = '';
+  prodSearch.value = '';
+  prodImage.value = '';
+  prodImagePath.value = '';
+  prodGalleryPaths.value = '';
+  state.editGallery = [];
+  state.imagemRemovida = false;
+  prodFrequency.value = '';
+  imagePreview.innerHTML = '';
+  galleryPreview.innerHTML = '';
+
+  btnArquivarProduto.hidden = !editId;
+
+  const ok = await fillProjectSelect();
+  if(!ok) return;
+
+  if(editId){
+    const pr = await get(STORES.products, editId);
+    await fillProjectSelect(pr.projectId);
+    prodName.value = pr?.name || '';
+    prodDesc.value = pr?.description || '';
+    prodPrice.value = Number(pr?.price || 0).toFixed(2);
+    prodLink.value = pr?.link || '';
+    prodSearch.value = pr?.search || '';
+    prodImagePath.value = pr?.imagePath || '';
+    prodFrequency.value = pr?.frequency || '';
+    state.editGallery = (Array.isArray(pr?.gallery) ? pr.gallery.slice() : []);
+    await refreshEditorPreviews(pr);
+  } else {
+    if(state.currentProjectId) prodProject.value = state.currentProjectId;
+    await refreshEditorPreviews(null);
+  }
+
+  modalProduct.showModal();
+}
+
+async function saveProduct(){
+  const selectedProjectId = prodProject.value || state.currentProjectId;
+  if(!selectedProjectId) return alert('Selecione um projeto para o produto.');
+  const currentViewBefore = state.currentView;
+  const currentProjectBefore = state.currentProjectId;
+  const now = Date.now();
+  const file = prodImage.files && prodImage.files[0];
+  const path = normalizePath(prodImagePath.value);
+  let old = null;
+  if(state.editProductId) old = await get(STORES.products, state.editProductId);
+
+  let image = old?.image || null;
+  let imagePath = old?.imagePath || '';
+  let avisoImagem = '';
+  if(file){
+    image = await storeImageFile(file);
+    imagePath = '';
+  } else if(path && ehLinkHttp(path)){
+    progressShow('Baixando imagem…', 'Baixando o link para guardar junto do produto');
+    await uiTick(true);
+    try{
+      image = await baixarImagemDeURL(path);
+      imagePath = '';
+    }catch(e){
+      console.warn('Não foi possível baixar a imagem do link:', path, e);
+      image = null;
+      imagePath = path;
+      avisoImagem = 'Não foi possível baixar a imagem principal pelo link informado (o site de origem pode estar ' +
+        'bloqueando o download). O produto foi salvo usando o link direto, que vai quebrar se a imagem mudar ou sair do site.';
+    }
+    progressHide();
+  } else if(path){
+    image = null;
+    imagePath = path;
+  } else if(state.imagemRemovida){
+    image = null;
+    imagePath = '';
+  }
+
+  const projectChanged = !!old && old.projectId !== selectedProjectId;
+  const base = {
+    projectId: selectedProjectId,
+    name: (prodName.value || '').trim(),
+    description: (prodDesc.value || '').trim(),
+    price: Number(prodPrice.value || 0),
+    link: (prodLink.value || '').trim(),
+    search: (prodSearch.value || '').trim(),
+    frequency: prodFrequency.value || '',
+    image,
+    imagePath,
+    gallery: state.editGallery.filter(Boolean),
+    updatedAt: now,
+  };
+
+  if(state.editProductId){
+    const targetProducts = (await getProductsByProject(selectedProjectId)).sort(byProductOrder);
+    const nextOrder = projectChanged ? targetProducts.length : (old?.order ?? targetProducts.length);
+    await put(STORES.products, { ...old, ...base, order: nextOrder });
+    if(projectChanged && old?.projectId) await ensureProductOrder(old.projectId);
+    await ensureProductOrder(selectedProjectId);
+  } else {
+    const targetProducts = (await getProductsByProject(selectedProjectId)).sort(byProductOrder);
+    await put(STORES.products, { id: id(), createdAt: now, order: targetProducts.length, ...base });
+    await ensureProductOrder(selectedProjectId);
+  }
+
+  modalProduct.close();
+  state.currentProjectId = currentProjectBefore || selectedProjectId;
+  await rerenderCurrentView(currentViewBefore);
+  if(avisoImagem) alert(avisoImagem);
+}
+
+/* Salva e abre o vizinho no editor. O id do destino é lido antes de salvar,
+   porque salvar pode reordenar a lista. */
+async function salvarEIrPara(passo){
+  if(state.editPos < 0 || state.editLista.length < 2){ await saveProduct(); return; }
+  const destino = state.editLista[(state.editPos + passo + state.editLista.length) % state.editLista.length];
+  const lista = state.editLista.slice();
+  const pos = (state.editPos + passo + state.editLista.length) % state.editLista.length;
+
+  await saveProduct();
+
+  state.editLista = lista;
+  state.editPos = pos;
+  await openProductModal(destino, { manterLista: true });
+  state.editLista = lista;
+  state.editPos = pos;
+}
+
+/* Atalhos de letra só valem fora de campo de texto, senão roubariam
+   o que está sendo digitado. */
+function digitandoEmCampo(){
+  const el = document.activeElement;
+  if(!el) return false;
+  const tag = el.tagName;
+  return tag === 'INPUT' || tag === 'TEXTAREA' || el.isContentEditable;
+}
+
+/* atalhos do editor de produto */
+modalProduct.addEventListener('keydown', (e)=>{
+  // f abre a frequência, desde que não esteja digitando
+  if(!e.ctrlKey && !e.metaKey && !e.altKey && (e.key === 'f' || e.key === 'F') && !digitandoEmCampo()){
+    e.preventDefault();
+    prodFrequency.focus();
+    try{ prodFrequency.showPicker(); }catch(err){}
+    return;
+  }
+
+  if((e.ctrlKey || e.metaKey) && e.key === 'Enter'){
+    e.preventDefault();
+    saveProduct();
+    return;
+  }
+
+  // Ctrl+seta sozinho colide com atalhos do sistema/navegador (ex.: trocar
+  // de área de trabalho, mover o cursor por palavra); Alt entra como
+  // "desempate" para este atalho ficar livre de conflito.
+  if(!(e.ctrlKey || e.metaKey) || !e.altKey) return;
+
+  if(e.key === 'ArrowRight'){
+    e.preventDefault();
+    salvarEIrPara(1);
+  } else if(e.key === 'ArrowLeft'){
+    e.preventDefault();
+    salvarEIrPara(-1);
+  }
+});
+
+function downloadText(filename, text, type='application/json'){
+  downloadBlob(filename, new Blob([text], { type }));
+}
+function downloadBlob(filename, blob){
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+}
+
+/* ============================================================
+   CONTAINER .prjz  —  um ZIP com:
+     manifest.json
+     projects/01-nome.json   (um JSON por projeto)
+     images/<hash>.<ext>     (imagem binária, sem base64)
+   ZIP escrito e lido aqui mesmo, sem biblioteca externa.
+   ============================================================ */
+const CONTAINER_FORMAT = 'projprod';
+const CONTAINER_VERSION = 1;
+const CONTAINER_EXT = '.prjz';
+const te = new TextEncoder();
+const td = new TextDecoder();
+
+const CRC_TABLE = (()=>{
+  const t = new Uint32Array(256);
+  for(let i=0;i<256;i++){
+    let c = i;
+    for(let k=0;k<8;k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+    t[i] = c >>> 0;
+  }
+  return t;
+})();
+function crc32(u8){
+  let c = 0xFFFFFFFF;
+  for(let i=0;i<u8.length;i++) c = CRC_TABLE[(c ^ u8[i]) & 0xFF] ^ (c >>> 8);
+  return (c ^ 0xFFFFFFFF) >>> 0;
+}
+
+async function deflateRaw(u8){
+  if(typeof CompressionStream === 'undefined') return null;
+  try{
+    const s = new Blob([u8]).stream().pipeThrough(new CompressionStream('deflate-raw'));
+    return new Uint8Array(await new Response(s).arrayBuffer());
+  }catch(e){ return null; }
+}
+async function inflateRaw(u8){
+  if(typeof DecompressionStream === 'undefined') throw new Error('Navegador sem suporte a descompressão.');
+  const s = new Blob([u8]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
+  return new Uint8Array(await new Response(s).arrayBuffer());
+}
+
+async function zipCreate(entries, onProgress){
+  const parts = [], central = [];
+  let offset = 0;
+  let feitos = 0;
+  for(const e of entries){
+    onProgress?.(++feitos, entries.length);
+    await uiTick();
+    const nameBytes = te.encode(e.name);
+    const uSize = e.data.length;
+    const crc = crc32(e.data);
+    let method = 0, payload = e.data;
+    if(e.compress){
+      const def = await deflateRaw(e.data);
+      if(def && def.length < uSize){ method = 8; payload = def; }
+    }
+    const cSize = payload.length;
+    const lh = new Uint8Array(30 + nameBytes.length);
+    const dv = new DataView(lh.buffer);
+    dv.setUint32(0, 0x04034b50, true);
+    dv.setUint16(4, 20, true);
+    dv.setUint16(6, 0x0800, true);
+    dv.setUint16(8, method, true);
+    dv.setUint32(14, crc, true);
+    dv.setUint32(18, cSize, true);
+    dv.setUint32(22, uSize, true);
+    dv.setUint16(26, nameBytes.length, true);
+    lh.set(nameBytes, 30);
+    parts.push(lh, payload);
+    central.push({ nameBytes, crc, cSize, uSize, method, offset });
+    offset += lh.length + cSize;
+  }
+  const cdParts = [];
+  let cdSize = 0;
+  for(const c of central){
+    const ch = new Uint8Array(46 + c.nameBytes.length);
+    const dv = new DataView(ch.buffer);
+    dv.setUint32(0, 0x02014b50, true);
+    dv.setUint16(4, 20, true);
+    dv.setUint16(6, 20, true);
+    dv.setUint16(8, 0x0800, true);
+    dv.setUint16(10, c.method, true);
+    dv.setUint32(16, c.crc, true);
+    dv.setUint32(20, c.cSize, true);
+    dv.setUint32(24, c.uSize, true);
+    dv.setUint16(28, c.nameBytes.length, true);
+    dv.setUint32(42, c.offset, true);
+    ch.set(c.nameBytes, 46);
+    cdParts.push(ch);
+    cdSize += ch.length;
+  }
+  const eocd = new Uint8Array(22);
+  const dv = new DataView(eocd.buffer);
+  dv.setUint32(0, 0x06054b50, true);
+  dv.setUint16(8, central.length, true);
+  dv.setUint16(10, central.length, true);
+  dv.setUint32(12, cdSize, true);
+  dv.setUint32(16, offset, true);
+  return new Blob([...parts, ...cdParts, eocd], { type: 'application/zip' });
+}
+
+async function zipRead(buffer){
+  const u8 = new Uint8Array(buffer);
+  const dv = new DataView(buffer);
+  let eo = -1;
+  for(let i = u8.length - 22; i >= Math.max(0, u8.length - 66000); i--){
+    if(dv.getUint32(i, true) === 0x06054b50){ eo = i; break; }
+  }
+  if(eo < 0) throw new Error('Arquivo compactado inválido.');
+  const count = dv.getUint16(eo + 10, true);
+  let p = dv.getUint32(eo + 16, true);
+  const map = new Map();
+  for(let i=0;i<count;i++){
+    if(dv.getUint32(p, true) !== 0x02014b50) throw new Error('Índice do arquivo corrompido.');
+    const method = dv.getUint16(p + 10, true);
+    const cSize = dv.getUint32(p + 20, true);
+    const nLen = dv.getUint16(p + 28, true);
+    const eLen = dv.getUint16(p + 30, true);
+    const cLen = dv.getUint16(p + 32, true);
+    const lho = dv.getUint32(p + 42, true);
+    const name = td.decode(u8.subarray(p + 46, p + 46 + nLen));
+    const start = lho + 30 + dv.getUint16(lho + 26, true) + dv.getUint16(lho + 28, true);
+    map.set(name, { method, start, cSize });
+    p += 46 + nLen + eLen + cLen;
+  }
+  const api = {
+    names: [...map.keys()],
+    async bytes(n){
+      const e = map.get(n);
+      if(!e) return null;
+      const raw = u8.subarray(e.start, e.start + e.cSize);
+      if(e.method === 0) return raw;
+      if(e.method === 8) return await inflateRaw(raw);
+      throw new Error('Método de compressão não suportado.');
+    },
+    async text(n){ const b = await api.bytes(n); return b ? td.decode(b) : null; },
+    async blob(n, mime){ const b = await api.bytes(n); return b ? new Blob([b], { type: mime }) : null; },
+  };
+  return api;
+}
+
+const projectFileSlug = (name, i) =>
+  'projects/' + String(i).padStart(2,'0') + '-' + (safeName(name).replace(/\s+/g,'-').toLowerCase() || 'projeto') + '.json';
+
+async function buildContainer(projects, onProgress){
+  const entries = [];
+  const imgPath = new Map();
+  const manifestProjects = [];
+  let imgBytes = 0;
+
+  async function pathFor(ref){
+    if(!ref) return null;
+    if(!isImageRef(ref)) return ref;
+    const imgId = refToId(ref);
+    if(imgPath.has(imgId)) return imgPath.get(imgId);
+    const rec = await getImageRecord(imgId);
+    if(!rec || !rec.blob) return null;
+    const path = 'images/' + imgId + '.' + extFromMime(rec.mime);
+    imgPath.set(imgId, path);
+    entries.push({ name: path, data: new Uint8Array(await rec.blob.arrayBuffer()), compress: false });
+    imgBytes += rec.blob.size;
+    const withThumb = await ensureThumb(rec);
+    if(withThumb.thumb){
+      entries.push({ name: 'thumbs/' + imgId + '.webp', data: new Uint8Array(await withThumb.thumb.arrayBuffer()), compress: false });
+    }
+    return path;
+  }
+
+  let i = 0;
+  for(const project of projects){
+    i++;
+    onProgress?.(i, projects.length, project.name);
+    await uiTick();
+    const products = (await getProductsByProject(project.id)).sort(byProductOrder);
+    const proj = { ...project, cover: await pathFor(project.cover) };
+    const prods = [];
+    for(const pr of products){
+      const gallery = [];
+      for(const g of (Array.isArray(pr.gallery) ? pr.gallery : [])){
+        const v = await pathFor(g);
+        if(v) gallery.push(v);
+      }
+      prods.push({ ...pr, image: await pathFor(pr.image), gallery });
+    }
+    const file = projectFileSlug(project.name, i);
+    entries.push({ name: file, data: te.encode(JSON.stringify({ project: proj, products: prods }, null, 2)), compress: true });
+    manifestProjects.push({ file, id: project.id, name: project.name, products: prods.length });
+  }
+
+  const manifest = {
+    format: CONTAINER_FORMAT,
+    version: CONTAINER_VERSION,
+    app: 'Projetos & Produtos — Offline',
+    createdAt: new Date().toISOString(),
+    projects: manifestProjects,
+    images: { count: imgPath.size, bytes: imgBytes },
+    imageQuality: IMG_QUALITY,
+    thumbQuality: THUMB_QUALITY,
+    imageMax: IMG_MAX,
+    thumbMax: THUMB_MAX,
+  };
+  entries.unshift({ name: 'manifest.json', data: te.encode(JSON.stringify(manifest, null, 2)), compress: true });
+  return await zipCreate(entries, (d, t)=> progressSet(d, t, 'Compactando o arquivo…'));
+}
+
+async function importContainer(file, { replaceAll = false } = {}){
+  const zip = await zipRead(await file.arrayBuffer());
+  const manifestText = await zip.text('manifest.json');
+  if(!manifestText) throw new Error('manifest.json não encontrado no arquivo.');
+  const manifest = JSON.parse(manifestText);
+  if(manifest.format !== CONTAINER_FORMAT) throw new Error('Formato desconhecido: ' + manifest.format);
+
+  if(replaceAll){
+    await clearStore(STORES.projects);
+    await clearStore(STORES.products);
+  }
+
+  // miniaturas gravadas com qualidade diferente da atual são refeitas
+  const thumbsServem = manifest.thumbQuality === THUMB_QUALITY;
+  const pathRef = new Map();
+  const nomesImg = zip.names.filter(n => n.startsWith('images/'));
+  let feitasImg = 0;
+  for(const name of nomesImg){
+    const blob = await zip.blob(name, mimeFromExt(name.split('.').pop()));
+    if(!blob) continue;
+    const base = name.slice('images/'.length).replace(/\.[^.]+$/, '');
+    // a miniatura do arquivo só serve se tiver sido feita nesta qualidade;
+    // o manifest diz qual foi usada
+    const thumb = (thumbsServem && zip.names.includes('thumbs/' + base + '.webp'))
+      ? await zip.blob('thumbs/' + base + '.webp', 'image/webp')
+      : null;
+    pathRef.set(name, await storeImageBlob(blob, thumb, { jaProcessada: !!thumb, idPronto: base }));
+    progressSet(++feitasImg, nomesImg.length, 'Lendo imagens…');
+    await uiTick();
+  }
+  const resolve = (v)=> (typeof v === 'string' && pathRef.has(v)) ? pathRef.get(v) : (v || null);
+
+  let nProj = 0, nProd = 0;
+  const listaProj = manifest.projects || [];
+  for(const entry of listaProj){
+    progressSet(nProj, listaProj.length, 'Lendo projeto: ' + (entry.name || ''));
+    await uiTick();
+    const txt = await zip.text(entry.file);
+    if(!txt) continue;
+    const data = JSON.parse(txt);
+    const project = data.project || (Array.isArray(data.projects) ? data.projects[0] : null);
+    if(!project) continue;
+    await put(STORES.projects, { ...project, cover: resolve(project.cover) });
+    nProj++;
+    for(const pr of (Array.isArray(data.products) ? data.products : [])){
+      await put(STORES.products, {
+        ...pr,
+        image: resolve(pr.image),
+        gallery: (Array.isArray(pr.gallery) ? pr.gallery : []).map(resolve).filter(Boolean),
+      });
+      nProd++;
+    }
+  }
+  return { nProj, nProd, nImg: pathRef.size };
+}
+
+/* ---- formato antigo: um .json por projeto, com base64 embutido ---- */
+function parseImportPayload(data){
+  if(data && Array.isArray(data.projects) && Array.isArray(data.products)){
+    return { projects: data.projects, products: data.products };
+  }
+  if(data && data.project && Array.isArray(data.products)){
+    return { projects: [data.project], products: data.products };
+  }
+  throw new Error('Arquivo inválido.');
+}
+
+async function importPayload(data, { replaceAll = false } = {}){
+  const payload = parseImportPayload(data);
+  if(replaceAll){
+    await clearStore(STORES.projects);
+    await clearStore(STORES.products);
+  }
+  let nProj = 0, nProd = 0;
+  const totalItens = payload.projects.length + payload.products.length;
+  for(const p of payload.projects){
+    await put(STORES.projects, { ...p, cover: await toImageRef(p.cover) });
+    nProj++;
+    progressSet(nProj + nProd, totalItens, 'Convertendo imagens…');
+    await uiTick();
+  }
+  for(const pr of payload.products){
+    const gallery = [];
+    for(const g of (Array.isArray(pr.gallery) ? pr.gallery : [])){
+      const v = await toImageRef(g);
+      if(v) gallery.push(v);
+    }
+    await put(STORES.products, { ...pr, image: await toImageRef(pr.image), gallery });
+    nProd++;
+    progressSet(nProj + nProd, totalItens, 'Convertendo imagens…');
+    await uiTick();
+  }
+  return { nProj, nProd };
+}
+
+/* Sem argumento, exporta TUDO — e o que o botao do topo faz, esteja o
+   usuario onde estiver. Com um id, exporta so aquele projeto, que e o
+   botao "Salvar Projeto" da barra do projeto. */
+async function exportData(projectId = null){
+  const all = (await getAll(STORES.projects)).sort(byOrder);
+  let list = all;
+  let label = 'Projetos e Produtos';
+  if(projectId){
+    const p = await get(STORES.projects, projectId);
+    if(!p) return alert('Projeto não encontrado.');
+    list = [p]; label = p.name;
+  }
+  if(!list.length) return alert('Não há projetos para exportar.');
+  const botoes = [btnBackup, btnSaveProject].filter(Boolean);
+  botoes.forEach(b => b.disabled = true);
+  progressShow('Exportando…', 'Preparando os projetos');
+  await uiTick(true);
+  try{
+    const blob = await buildContainer(list, (i, total, nome)=> progressSet(i, total, 'Preparando: ' + nome));
+    progressStep('Salvando o arquivo…');
+    await uiTick(true);
+    downloadBlob(safeName(label) + ' ' + nowStamp() + CONTAINER_EXT, blob);
+    marcarSalvo();
+    progressHide();
+  }catch(e){
+    console.error(e);
+    progressError('Falha ao exportar',
+      '<b>Não foi possível gerar o arquivo.</b><div style="margin-top:10px;opacity:.75;font-size:12px">Detalhe técnico: ' +
+      escapeHTML(String(e && e.message ? e.message : e)) + '</div>');
+  }finally{
+    botoes.forEach(b => b.disabled = false);
+  }
+}
+
+async function isZipFile(file){
+  const head = new Uint8Array(await file.slice(0, 4).arrayBuffer());
+  return head[0] === 0x50 && head[1] === 0x4B && head[2] === 0x03 && head[3] === 0x04;
+}
+
+async function importData(){
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.prjz,.zip,.json,application/json,application/zip';
+  input.multiple = true;
+  input.onchange = async ()=>{
+    const files = [...(input.files || [])];
+    if(!files.length) return;
+
+    const hasData = (await getAll(STORES.projects)).length > 0;
+    let replaceAll = false;
+    if(hasData){
+      replaceAll = confirm(
+        'Já existem projetos no app.\n\n' +
+        'OK = SUBSTITUIR tudo pelo conteúdo importado.\n' +
+        'Cancelar = ADICIONAR aos projetos existentes.'
+      );
+    }
+
+    btnRestore.disabled = true;
+    progressShow('Importando…', 'Lendo o arquivo');
+    await uiTick(true);
+    try{
+      let nProj = 0, nProd = 0, nImg = 0, first = true;
+      let nArq = 0;
+      for(const file of files){
+        nArq++;
+        const prefixo = files.length > 1 ? ('Arquivo ' + nArq + ' de ' + files.length + ': ') : '';
+        progressStep(prefixo + 'lendo ' + file.name);
+        await uiTick(true);
+        const opts = { replaceAll: replaceAll && first };
+        if(await isZipFile(file)){
+          const r = await importContainer(file, opts);
+          nProj += r.nProj; nProd += r.nProd; nImg += r.nImg;
+        } else {
+          const r = await importPayload(JSON.parse(await file.text()), opts);
+          nProj += r.nProj; nProd += r.nProd;
+        }
+        first = false;
+      }
+      progressStep('Organizando projetos…');
+      await uiTick(true);
+      await ensureProjectOrder();
+      const todos = await getAll(STORES.projects);
+      let k = 0;
+      for(const p of todos){
+        progressSet(++k, todos.length, 'Organizando: ' + p.name);
+        await uiTick();
+        await ensureProductOrder(p.id);
+      }
+
+      progressStep('Limpando imagens sem uso…');
+      await uiTick(true);
+      await collectGarbageImages();
+
+      progressStep('Montando a tela…');
+      await uiTick(true);
+      await rerenderCurrentView();
+      marcarSalvo();
+      progressHide();
+      alert('Importação concluída.\n' + nProj + ' projeto(s), ' + nProd + ' produto(s)' + (nImg ? ', ' + nImg + ' imagem(ns).' : '.'));
+    }catch(e){
+      console.error(e);
+      progressError('Falha ao importar',
+        '<b>O arquivo não pôde ser lido.</b> Confira se é um <code>.prjz</code> ou um <code>.json</code> exportado por este app.' +
+        '<div style="margin-top:10px;opacity:.75;font-size:12px">Detalhe técnico: ' +
+        escapeHTML(String(e && e.message ? e.message : e)) + '</div>');
+    }finally{
+      btnRestore.disabled = false;
+    }
+  };
+  input.click();
+}
+
+async function rerenderCurrentView(preferredView = null){
+  // renderProjects() chama setView('projects') e sobrescreve state.currentView,
+  // então a tela de origem precisa ser lida antes de redesenhar
+  const alvo = preferredView || state.currentView;
+  await ensureProjectOrder();
+  await refreshSidebar();
+  await renderProjects();
+  if(alvo === 'project'){
+    if(state.currentProjectId && await get(STORES.projects, state.currentProjectId)){
+      await openProject(state.currentProjectId);
+    } else {
+      await renderProjects();
+    }
+    return;
+  }
+  if(alvo === 'all'){
+    await renderAll();
+    return;
+  }
+  await renderProjects();
+}
+
+btnBack.addEventListener('click', ()=>{
+  if(state.currentView === 'project' || state.currentView === 'all') renderProjects();
+});
+btnNewProject.addEventListener('click', ()=> openProjectModal());
+btnEditProject?.addEventListener('click', ()=> openProjectModal(state.currentProjectId));
+btnDeleteProject?.addEventListener('click', deleteCurrentProject);
+btnNewProduct.addEventListener('click', ()=> openProductModal());
+btnViewProjects.addEventListener('click', renderProjects);
+btnViewAll.addEventListener('click', renderAll);
+btnBackup.addEventListener('click', ()=> exportData());
+btnSaveProject?.addEventListener('click', ()=>{
+  if(!state.currentProjectId) return alert('Abra um projeto primeiro.');
+  exportData(state.currentProjectId);
+});
+btnRestore.addEventListener('click', importData);
+
+el('#saveProjectBtn').addEventListener('click', saveProject);
+el('#saveProductBtn').addEventListener('click', saveProduct);
+el('#formProject').addEventListener('submit', (e)=>{ e.preventDefault(); saveProject(); });
+el('#formProduct').addEventListener('submit', (e)=>{ e.preventDefault(); saveProduct(); });
+searchProjects.addEventListener('input', renderProjects);
+searchAll.addEventListener('input', renderAll);
+
+prodImage.addEventListener('change', async ()=>{ if(prodImage.files?.[0]) prodImagePath.value = ''; await refreshEditorPreviews(state.editProductId ? await get(STORES.products, state.editProductId) : null); });
+prodImagePath.addEventListener('input', async ()=>{ if(prodImagePath.value.trim()) prodImage.value = ''; await refreshEditorPreviews(state.editProductId ? await get(STORES.products, state.editProductId) : null); });
+btnArquivarProduto.addEventListener('click', async ()=>{
+    if(!state.editProductId) return;
+    if(!confirm('Arquivar este produto? Ele sai das listas e dos totais, mas continua guardado e pode ser desarquivado no editor do projeto.')) return;
+    await arquivarProduto(state.editProductId);
+    modalProduct.close();
+    await rerenderCurrentView();
+  });
+  btnGaleriaCarregar.addEventListener('click', ()=> prodGalleryFiles.click());
+prodGalleryFiles.addEventListener('change', async ()=>{
+    await adicionarArquivosNaGaleria(prodGalleryFiles.files);
+    prodGalleryFiles.value = '';
+  });
+  btnGaleriaAddPaths.addEventListener('click', async ()=>{
+    let novos = parseLines(prodGalleryPaths.value);
+    if(!novos.length) return;
+    const vagas = GALERIA_MAX - 1 - state.editGallery.length;
+    if(vagas <= 0){ alert('A galeria já está no limite de ' + (GALERIA_MAX - 1) + ' imagens além da principal.'); return; }
+    if(novos.length > vagas) novos = novos.slice(0, vagas);
+
+    // links (http/https) sao baixados e guardados como blob, igual a um
+    // arquivo enviado do computador; caminho local so entra como texto mesmo
+    progressShow('Adicionando à galeria…', 'Baixando imagens dos links');
+    await uiTick(true);
+    const falhas = [];
+    let i = 0;
+    for(const item of novos){
+      progressSet(++i, novos.length, 'Processando: ' + item);
+      await uiTick();
+      if(ehLinkHttp(item)){
+        try{
+          state.editGallery.push(await baixarImagemDeURL(item));
+        }catch(e){
+          console.warn('Não foi possível baixar imagem da galeria:', item, e);
+          state.editGallery.push(item);
+          falhas.push(item);
+        }
+      } else {
+        state.editGallery.push(item);
+      }
+    }
+    progressHide();
+    prodGalleryPaths.value = '';
+    renderEditorGallery();
+    if(falhas.length){
+      alert('Não foi possível baixar ' + falhas.length + ' imagem(ns) da galeria pelo link informado (o site de ' +
+        'origem pode estar bloqueando o download). Elas foram adicionadas usando o link direto, que vai quebrar ' +
+        'se a imagem mudar ou sair do site:\n' + falhas.join('\n'));
+    }
+  });
+  btnGaleriaLimpar.addEventListener('click', ()=>{
+    if(!state.editGallery.length) return;
+    if(confirm('Remover todas as imagens da galeria deste produto?')){
+      state.editGallery = [];
+      renderEditorGallery();
+    }
+  });
+projCover.addEventListener('change', ()=>{
+  projCoverPreview.innerHTML = '';
+  const f = projCover.files && projCover.files[0];
+  if(!f) return;
+  const img = document.createElement('img');
+  img.src = URL.createObjectURL(f);
+  img.style.maxHeight = '100px';
+  img.style.border = '1px solid var(--border)';
+  img.style.borderRadius = '8px';
+  projCoverPreview.appendChild(img);
+});
+
+/* Arrastar e soltar sao tratados numa AREA, nunca no item nem so no
+   container. A area e a coluna inteira (o main, ou a barra lateral):
+     - com o ponteiro acima da galeria, ele esta por cima da barra do
+       topo, que nao e a grade. Escutando so na grade, o evento nunca
+       chegava e o item nao ia para a primeira posicao;
+     - o pontilhado, os vaos da grade e o espaco vazio no fim tambem
+       precisam aceitar a soltura, senao o navegador cancela o arrasto
+       e o item volta para o lugar de origem.
+   Soltar fora da area nao dispara drop nenhum: o dragend cancela e o
+   item fica onde estava, que e o comportamento combinado. */
+function registrarAreaDeArrasto(container, area, aoSoltar){
+  area.addEventListener('dragover', (e)=>{
+    if(!dragMeta || dragMeta.container !== container) return;
+    handleContainerDragOver(e, container);
+  });
+  area.addEventListener('drop', async (e)=>{
+    if(!dragMeta || dragMeta.container !== container) return;
+    e.preventDefault();
+    await finishSortableDrag(aoSoltar);
+  });
+}
+
+const barraLateral = document.querySelector('aside');
+
+/* Cada projeto tem a sua grade dentro da rolagem contínua; o arrasto
+   acontece dentro da grade onde começou e salva a ordem daquele
+   projeto. O DOM já está na ordem certa: redesenhar aqui só faria a
+   grade piscar. */
+viewProject.addEventListener('dragover', (e)=>{
+  if(!dragMeta || dragMeta.type !== 'product') return;
+  handleContainerDragOver(e, dragMeta.container);
+});
+viewProject.addEventListener('drop', async (e)=>{
+  if(!dragMeta || dragMeta.type !== 'product') return;
+  e.preventDefault();
+  const pid = dragMeta.projectId;
+  await finishSortableDrag(async ()=> { await persistProductOrderFromDOM(pid); });
+});
+
+/* A grade de projetos da página inicial não recebe arrasto: reordenar
+   projetos é papel da barra lateral. */
+
+registrarAreaDeArrasto(projectList, barraLateral, async ()=>{
+  await persistProjectOrderFromDOM(projectList, 'li[data-id]');
+  // a grade de projetos so e redesenhada se estiver a vista: renderProjects
+  // troca a view e tiraria o usuario de dentro do projeto aberto
+  if(state.currentView === 'projects') await renderProjects();
+});
+
+
+/* ============================================================
+   FICHA DO PRODUTO  —  painel que sobe de baixo, com galeria,
+   e visor em tela cheia com setas.
+   ============================================================ */
+const FREQUENCIAS = [
+  ['unica', 'Compra única'],
+  ['mensal', '1 vez por mês'],
+  ['bimestral', '2 em 2 meses'],
+  ['trimestral', '3 em 3 meses'],
+  ['semestral', '6 em 6 meses'],
+  ['anual', '1 vez ao ano'],
+  ['cinco-anos', 'Dura uns 5 anos'],
+];
+const rotuloFrequencia = (v)=> (FREQUENCIAS.find(f => f[0] === v) || [])[1] || '';
+
+let visorItens = [];
+let visorIdx = 0;
+let fichaProdutoId = null;
+let fichaLista = [];      // ids na ordem em que estão na tela
+let fichaPos = -1;
+
+/* A ordem vem do que está renderizado, então respeita filtro de busca,
+   ordenação manual e a tela em que o produto foi aberto. */
+function listaDeProdutosNaTela(){
+  const grade = state.currentView === 'all' ? allGrid : productsGrid;
+  return [...grade.querySelectorAll('.product[data-id]')].map(el => el.dataset.id);
+}
+
+async function passarProduto(passo){
+  if(fichaLista.length < 2) return;
+  fichaPos = (fichaPos + passo + fichaLista.length) % fichaLista.length;
+  await abrirFicha(fichaLista[fichaPos], { manterLista: true });
+}
+
+/* ---------- visor em tela cheia ---------- */
+function abrirVisor(itens, inicio = 0){
+  visorItens = (itens || []).filter(Boolean);
+  if(!visorItens.length) return;
+  visorIdx = Math.max(0, Math.min(inicio, visorItens.length - 1));
+  visor.hidden = false;
+  requestAnimationFrame(()=> visor.classList.add('aberto'));
+  desenharVisor();
+}
+
+function desenharVisor(){
+  visorPalco.innerHTML = '';
+  const img = new Image();
+  img.alt = 'Imagem ' + (visorIdx + 1);
+  setImageSource(img, visorItens[visorIdx], { eager: true, full: true });
+  visorPalco.appendChild(img);
+  visorContador.textContent = (visorIdx + 1) + ' de ' + visorItens.length;
+  const varias = visorItens.length > 1;
+  visorPrev.hidden = !varias;
+  visorNext.hidden = !varias;
+}
+
+function passarVisor(passo){
+  if(visorItens.length < 2) return;
+  visorIdx = (visorIdx + passo + visorItens.length) % visorItens.length;
+  desenharVisor();
+}
+
+function fecharVisor(){
+  visor.classList.remove('aberto');
+  setTimeout(()=>{
+    visor.hidden = true;
+    visorPalco.innerHTML = '';
+    visorItens = [];
+  }, 200);
+}
+
+/* ============================================================
+   DECK DE IMAGENS DA FICHA
+   Uma foto por vez. As outras ficam empilhadas abaixo, saindo
+   um pouco por baixo da primeira. Clicar na metade de cima
+   volta uma, na metade de baixo avança uma; a roda do mouse
+   faz o mesmo. Sempre em ciclo.
+   ============================================================ */
+const GALERIA_MAX = 5;        // teto de imagens por produto (principal + galeria)
+const DECK_VISIVEIS = GALERIA_MAX;   // todas aparecem na pilha
+const DECK_PASSO = 15;        // altura do ressalto de cada cartela, em px
+const DECK_ESCALA = 0.055;    // o quanto cada cartela estreita (so na horizontal)
+
+let deckItens = [];
+let deckIdx = 0;
+let deckCartas = [];
+let deckRodaEm = 0;
+
+function posicionarDeck(){
+  const n = deckItens.length;
+  deckCartas.forEach((carta, i)=>{
+    const pos = (i - deckIdx + n) % n;
+    const visivel = pos < DECK_VISIVEIS;
+    carta.style.zIndex = String(100 - pos);
+    carta.style.transform = 'translate3d(0,' + (pos * DECK_PASSO) + 'px,0) scaleX(' + (1 - pos * DECK_ESCALA) + ')';
+    // a da frente e opaca; as de baixo viram camadas translucidas de cor
+    // com o tom claro fixo, a queda precisa ser suave: senão os últimos
+    // degraus somem por completo
+    carta.style.opacity = !visivel ? '0' : (pos === 0 ? '1' : String(Math.max(0.55, 0.95 - (pos - 1) * 0.13)));
+    carta.style.filter = 'none';
+    carta.style.pointerEvents = pos === 0 ? 'auto' : 'none';
+    carta.setAttribute('aria-hidden', pos === 0 ? 'false' : 'true');
+    // só a da frente mostra a foto; as de baixo viram faixa de cor
+    carta.classList.toggle('frente', pos === 0);
+  });
+  // a pilha cresce para cima: a última cartela fica rente à base,
+  // então quanto mais imagens, mais alto o topo
+  const degraus = Math.max(0, Math.min(n, DECK_VISIVEIS) - 1);
+  fichaDeck.style.bottom = (degraus * DECK_PASSO) + 'px';
+}
+
+function passarDeck(passo){
+  const n = deckItens.length;
+  if(n < 2) return;
+  deckIdx = (deckIdx + passo + n) % n;
+  posicionarDeck();
+}
+
+function montarDeck(imagens, alt=''){
+  deckItens = (imagens || []).filter(Boolean).slice(0, GALERIA_MAX);
+  deckIdx = 0;
+  deckCartas = [];
+  fichaDeck.innerHTML = '';
+  fichaDeck.classList.toggle('varias', deckItens.length > 1);
+
+  if(!deckItens.length){
+    const vazio = document.createElement('div');
+    vazio.className = 'deck-vazio';
+    vazio.textContent = 'Sem imagem';
+    fichaDeck.appendChild(vazio);
+    fichaDeck.style.bottom = '0px';
+    return;
+  }
+
+  deckItens.forEach((src, i)=>{
+    const carta = document.createElement('div');
+    carta.className = 'carta';
+    const img = new Image();
+    img.alt = alt + (deckItens.length > 1 ? ' — imagem ' + (i + 1) : '');
+    img.draggable = false;
+    setImageSource(img, src, { eager: i < DECK_VISIVEIS });
+    carta.appendChild(img);
+    fichaDeck.appendChild(carta);
+    deckCartas.push(carta);
+  });
+
+  posicionarDeck();
+}
+
+/* clique: metade de cima volta, metade de baixo avança */
+fichaDeck.addEventListener('click', (e)=>{
+  if(deckItens.length < 2) return;
+  const r = fichaDeck.getBoundingClientRect();
+  passarDeck((e.clientY - r.top) < r.height / 2 ? -1 : 1);
+});
+
+/* roda do mouse sobre a foto */
+fichaDeck.addEventListener('wheel', (e)=>{
+  if(deckItens.length < 2) return;
+  e.preventDefault();
+  const agora = performance.now();
+  if(agora - deckRodaEm < 220) return;   // evita disparar varias de uma vez
+  deckRodaEm = agora;
+  passarDeck(e.deltaY > 0 ? 1 : -1);
+}, { passive: false });
+
+/* dois cliques abrem em tela cheia, sem atrapalhar a navegação */
+fichaDeck.addEventListener('dblclick', (e)=>{
+  e.preventDefault();
+  if(deckItens.length) abrirVisor(deckItens, deckIdx);
+});
+
+/* ---------- ficha ---------- */
+async function abrirFicha(produtoId, { manterLista = false } = {}){
+  const prod = await get(STORES.products, produtoId);
+  if(!prod) return;
+  fichaProdutoId = produtoId;
+  if(!manterLista){
+    fichaLista = listaDeProdutosNaTela();
+    fichaPos = fichaLista.indexOf(produtoId);
+    if(fichaPos < 0){ fichaLista = [produtoId]; fichaPos = 0; }
+  }
+  // as setas só fazem sentido com mais de um produto na lista
+  for(const b of document.querySelectorAll('.ficha-seta')) b.hidden = fichaLista.length < 2;
+  const projeto = await get(STORES.projects, prod.projectId);
+  const imagens = resolveGallery(prod);
+
+  fichaNome.textContent = prod.name || 'Sem nome';
+  fichaPreco.innerHTML = '<small>R$</small>' + fmt.format(Number(prod.price || 0)).replace(SEM_MOEDA, '');
+
+  fichaProjeto.textContent = projeto ? projeto.name : '';
+  fichaProjeto.hidden = !projeto;
+  fichaProjeto.onclick = projeto ? ()=>{ fecharFicha(); openProject(projeto.id); } : null;
+
+  const desc = (prod.description || '').trim();
+  fichaDesc.textContent = desc;
+  fichaDesc.hidden = !desc;
+
+  // etiquetas: frequencia e quantidade de fotos
+  fichaEtiquetas.innerHTML = '';
+  const etiqueta = (texto)=>{
+    const s = document.createElement('span');
+    s.className = 'ficha-etiqueta';
+    s.textContent = texto;
+    fichaEtiquetas.appendChild(s);
+  };
+  const freq = rotuloFrequencia(prod.frequency);
+  if(freq) etiqueta(freq);
+  const nFotos = Math.min(imagens.length, GALERIA_MAX);
+  if(nFotos > 1) etiqueta(nFotos + ' fotos');
+
+  // pilha de imagens
+  montarDeck(imagens, prod.name || '');
+
+  // ações em ícones
+  fichaAcoes.innerHTML = '';
+  const acaoIcone = (titulo, miolo, aoClicar, extra = '')=>{
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'acao-icone' + (extra ? ' ' + extra : '');
+    b.title = titulo;
+    b.setAttribute('aria-label', titulo);
+    b.innerHTML = "<svg viewBox=\"0 0 24 24\" width=\"17\" height=\"17\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">%MIOLO%</svg>".replace('%MIOLO%', miolo);
+    b.addEventListener('click', aoClicar);
+    fichaAcoes.appendChild(b);
+    return b;
+  };
+
+  // editar fica de propósito mais apagado que os outros
+  acaoIcone('Editar', "<path d=\"m12 20h9\"/><path d=\"M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4Z\"/>",
+    ()=>{ fecharFicha(); openProductModal(prod.id); }, 'discreto');
+
+  if(prod.link){
+    const a = document.createElement('a');
+    a.className = 'acao-icone';
+    a.href = prod.link;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.title = 'Abrir link de venda';
+    a.setAttribute('aria-label', 'Abrir link de venda');
+    a.innerHTML = "<svg viewBox=\"0 0 24 24\" width=\"17\" height=\"17\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z\"/><path d=\"M3 6h18\"/><path d=\"M16 10a4 4 0 1 1-8 0\"/></svg>";
+    fichaAcoes.appendChild(a);
+  }
+
+  const busca = (prod.search || prod.name || '').trim();
+  if(busca){
+    acaoIcone('Pesquisar no Google', "<circle cx=\"11\" cy=\"11\" r=\"8\"/><path d=\"m21 21-4.3-4.3\"/>",
+      ()=> window.open('https://www.google.com/search?q=' + encodeURIComponent(busca), '_blank'));
+  }
+
+
+  // trocar de produto com a ficha aberta não deve repetir a animação de
+  // entrada; e o rAF sozinho não dispara com a aba em segundo plano
+  if(ficha.hidden){
+    ficha.hidden = false;
+    let feito = false;
+    const mostrar = ()=>{ if(feito) return; feito = true; ficha.classList.add('aberta'); };
+    requestAnimationFrame(()=> setTimeout(mostrar, 0));
+    setTimeout(mostrar, 60);
+  }
+}
+
+function fecharFicha(){
+  ficha.classList.remove('aberta');
+  fichaProdutoId = null;
+  setTimeout(()=>{ ficha.hidden = true; }, 320);
+}
+
+/* ---------- eventos globais da ficha e do visor ---------- */
+document.querySelectorAll('[data-fechar-ficha]').forEach(el => el.addEventListener('click', fecharFicha));
+document.querySelectorAll('.ficha-seta').forEach(b => b.addEventListener('click', (e)=>{
+  e.stopPropagation();
+  passarProduto(Number(b.dataset.produto));
+}));
+document.querySelectorAll('[data-fechar-visor]').forEach(el => el.addEventListener('click', fecharVisor));
+visorPrev.addEventListener('click', ()=> passarVisor(-1));
+visorNext.addEventListener('click', ()=> passarVisor(1));
+visorPalco.addEventListener('click', (e)=>{ if(e.target === visorPalco) fecharVisor(); });
+
+document.addEventListener('keydown', (e)=>{
+  if(!visor.hidden){
+    if(e.key === 'Escape'){ e.preventDefault(); fecharVisor(); }
+    else if(e.key === 'ArrowLeft') passarVisor(-1);
+    else if(e.key === 'ArrowRight') passarVisor(1);
+    return;
+  }
+  if(ficha.hidden) return;
+  // esquerda/direita trocam de produto; cima/baixo passam as fotos
+  if(e.key === 'Escape'){ e.preventDefault(); fecharFicha(); }
+  else if((e.key === 'e' || e.key === 'E') && !e.ctrlKey && !e.metaKey && !e.altKey && !digitandoEmCampo()){
+    e.preventDefault();
+    const alvo = fichaProdutoId;
+    fecharFicha();
+    if(alvo) openProductModal(alvo);
+  }
+  else if(e.key === 'ArrowLeft'){ e.preventDefault(); passarProduto(-1); }
+  else if(e.key === 'ArrowRight'){ e.preventDefault(); passarProduto(1); }
+  else if(e.key === 'ArrowUp'){ e.preventDefault(); passarDeck(-1); }
+  else if(e.key === 'ArrowDown'){ e.preventDefault(); passarDeck(1); }
+});
+
+/* ---- modo de exibição dos produtos: grade ou lista ---- */
+const LAYOUT_CHAVE = 'projprod_layout_produtos';
+
+function lerLayoutSalvo(){
+  try{
+    const v = localStorage.getItem(LAYOUT_CHAVE);
+    return v === 'lista' ? 'lista' : 'grade';
+  }catch(e){ return 'grade'; }
+}
+
+function aplicarLayoutProdutos(){
+  const lista = state.layoutProdutos === 'lista';
+  // na rolagem contínua há uma grade por projeto
+  const grades = [allGrid, ...productsGrid.querySelectorAll('.cards.products')];
+  for(const grade of grades){
+    grade.classList.toggle('lista', lista);
+  }
+  document.querySelectorAll('.alt-btn').forEach(b => {
+    b.classList.toggle('ativo', b.dataset.layout === state.layoutProdutos);
+  });
+}
+
+function definirLayoutProdutos(modo){
+  state.layoutProdutos = modo === 'lista' ? 'lista' : 'grade';
+  try{ localStorage.setItem(LAYOUT_CHAVE, state.layoutProdutos); }catch(e){}
+  aplicarLayoutProdutos();
+}
+
+document.querySelectorAll('.alt-btn').forEach(b => {
+  b.addEventListener('click', ()=> definirLayoutProdutos(b.dataset.layout));
+});
+
+/* ---- ocultar a barra lateral de projetos ---- */
+const ASIDE_CHAVE = 'projprod_aside_oculta';
+
+function lerAsideSalva(){
+  try{ return localStorage.getItem(ASIDE_CHAVE) === '1'; }catch(e){ return false; }
+}
+
+function aplicarAsideOculta(oculta){
+  layoutEl.classList.toggle('aside-oculta', oculta);
+  btnToggleSidebar.classList.toggle('ativo', oculta);
+  btnToggleSidebar.title = oculta ? 'Mostrar a barra de projetos' : 'Ocultar a barra de projetos';
+}
+
+function alternarAside(){
+  const oculta = !layoutEl.classList.contains('aside-oculta');
+  aplicarAsideOculta(oculta);
+  try{ localStorage.setItem(ASIDE_CHAVE, oculta ? '1' : '0'); }catch(e){}
+}
+
+btnToggleSidebar.addEventListener('click', alternarAside);
+
+(async function iniciar(){
+  state.layoutProdutos = lerLayoutSalvo();
+  aplicarLayoutProdutos();
+  aplicarAsideOculta(lerAsideSalva());
+  progressShow('Abrindo…', 'Conectando ao banco de dados');
+  await uiTick(true);
+
+  try{
+    await openDB();
+    modoArmazenamento = 'banco';
+  }catch(err){
+    modoArmazenamento = 'memoria';
+    console.warn('Sem IndexedDB — rodando no modo arquivo (memória).', err);
+  }
+  atualizarAvisoDeModo();
+
+  try{
+    progressStep('Verificando os dados…');
+    await uiTick(true);
+    const convertidos = await migrateInlineImages((d, t)=> progressSet(d, t, 'Convertendo imagens do formato antigo…'));
+    if(convertidos) console.info('Migração: ' + convertidos + ' registro(s) convertido(s).');
+
+    if(usandoBanco()){
+      const r = await migrateCompressImages((d, t)=> progressSet(d, t, 'Compactando imagens…'));
+      if(r.convertidas) console.info('Compactação: ' + r.convertidas + ' imagem(ns), ' + r.antesMB + ' MB → ' + r.depoisMB + ' MB.');
+    }
+
+    progressStep('Organizando projetos…');
+    await uiTick(true);
+    await ensureProjectOrder();
+    const projects = await getAll(STORES.projects);
+    let i = 0;
+    for(const p of projects){
+      progressSet(++i, projects.length, 'Organizando: ' + p.name);
+      await uiTick();
+      await ensureProductOrder(p.id);
+    }
+
+    progressStep('Montando a tela…');
+    await uiTick(true);
+    projectsEmpty.innerHTML = textoTelaVazia();
+    await refreshSidebar();
+    await renderProjects();
+    progressHide();
+  }catch(err){
+    console.error(err);
+    progressError('Erro ao carregar os dados',
+      '<b>O aplicativo abriu, mas falhou ao ler os projetos.</b>' +
+      '<div style="margin-top:10px;opacity:.75;font-size:12px">Detalhe técnico: ' +
+      escapeHTML(String(err && err.message ? err.message : err)) + '</div>');
+  }
+})();
+
+  </script>
+</body>
+</html>
