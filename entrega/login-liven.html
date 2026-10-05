@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Login Liven</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;600;700;800&display=swap">
+<style>
+  :root { --indigo:#3A3F80; --navy:#061153; --pill-top:#18287A; --ease:cubic-bezier(.22,.8,.2,1); }
+  * { box-sizing: border-box; }
+  body { margin:0; background:#222326; font-family:'Mulish',sans-serif; color:#1c1d24; }
+  .page { min-height:100vh; padding:24px; display:flex; align-items:center; justify-content:center; }
+  .card { width:100%; max-width:1280px; background:#fff; border-radius:40px; padding:12px; display:flex; flex-wrap:wrap; gap:12px; }
+
+  /* formulário */
+  .form-side { flex:1 1 380px; min-width:0; min-height:640px; padding:48px 32px; display:flex; align-items:center; justify-content:center; }
+  .form { width:100%; max-width:380px; display:flex; flex-direction:column; gap:20px; }
+  .brand { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+  .brand span { font-size:38px; font-weight:800; letter-spacing:1px; color:var(--indigo); }
+  h1 { margin:0; font-size:32px; font-weight:800; }
+  .sub { margin:-12px 0 0; font-size:15px; color:#5a5e6e; }
+  .field { display:flex; flex-direction:column; gap:8px; }
+  label { font-size:14px; font-weight:700; }
+  input { height:54px; border:1px solid #e3e4ea; background:#f6f6f8; border-radius:14px; padding:0 18px; font:inherit; font-size:15px; }
+  input:focus { outline:2px solid var(--indigo); outline-offset:1px; }
+  .forgot { display:inline-flex; align-items:center; gap:8px; min-height:44px; font-size:14px; font-weight:600; color:#2563c9; text-decoration:none; }
+  .btn { height:56px; border:0; border-radius:14px; background:var(--indigo); color:#fff; font:inherit; font-size:16px; font-weight:700; cursor:pointer; }
+  .btn:hover { background:#303474; }
+
+  /* painel de slides */
+  .panel { flex:1.15 1 420px; min-width:0; min-height:640px; position:relative; overflow:hidden; border-radius:30px; background:var(--navy); }
+  .bg { position:absolute; inset:0; opacity:0; transition:opacity 900ms ease; }
+  .bg.on { opacity:1; }
+  .pill-top, .pill-bottom { position:absolute; display:flex; align-items:center; color:#fff; transform:translateX(-125%); transition:transform 900ms var(--ease); }
+  .pill-top { top:30%; left:0; width:66%; height:112px; justify-content:flex-end; gap:12px; padding-right:9%; background:var(--pill-top); border-radius:0 999px 999px 0; font-size:26px; font-weight:800; }
+  .pill-bottom { top:calc(30% + 132px); left:34%; right:0; min-height:112px; padding:16px 8% 16px 11%; border-radius:999px 0 0 999px; font-size:18px; font-weight:700; line-height:1.35; }
+  .small .pill-top { width:46%; height:64px; font-size:15px; }
+  .small .pill-bottom { top:calc(30% + 84px); min-height:64px; font-size:15px; }
+  .slide.on .pill-top, .slide.on .pill-bottom { transform:translateX(0); }
+  .slide.on .pill-top { transition-delay:150ms; }
+  .slide.on .pill-bottom { transition-delay:350ms; }
+  .dots { position:absolute; left:0; right:0; bottom:32px; display:flex; justify-content:center; gap:8px; }
+  .dots button { height:8px; width:8px; padding:0; border:0; border-radius:999px; background:#fff; opacity:.45; cursor:pointer; transition:all 400ms ease; }
+  .dots button.on { width:28px; opacity:1; }
+</style>
+</head>
+<body>
+<div class="page"><div class="card">
+
+  <div class="form-side">
+    <form class="form" onsubmit="return false">
+      <div class="brand">
+        <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#3A3F80" stroke-width="5" stroke-linecap="round" aria-hidden="true"><path d="M14 6c-6 8-6 22 2 28 6 4 14 2 14-4s-8-6-10-2"/><circle cx="33" cy="30" r="3" stroke="#4fb9a0"/></svg>
+        <span>liven</span>
+      </div>
+      <h1>Bem-vindo</h1>
+      <p class="sub">Acesse sua conta Liven Infinity.</p>
+      <div class="field"><label for="user">Login ou E-mail</label><input id="user" type="text" placeholder="seu@email.com.br"></div>
+      <div class="field"><label for="pass">Senha</label><input id="pass" type="password" placeholder="Digite sua senha"></div>
+      <a class="forgot" href="#">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.5" r="1.5"/></svg>
+        Esqueci minha senha</a>
+      <button class="btn" type="submit">Login</button>
+    </form>
+  </div>
+
+  <!-- Cada .slide é uma unidade. Para editar: troque o texto, o gradiente do .pill-bottom e a cor do .bg. -->
+  <div class="panel" id="panel">
+    <div class="slide small" data-glow="#368391">
+      <div class="bg"></div>
+      <div class="pill-top">One-Stop-Shop</div>
+      <div class="pill-bottom" style="background:linear-gradient(45deg,#364EA2 10%,#368391 72%,#90C685 100%)">Conceito multisserviços: toda a sua energia em um só lugar.</div>
+    </div>
+    <div class="slide" data-glow="#368391">
+      <div class="bg"></div>
+      <div class="pill-top">Liven Gestora</div>
+      <div class="pill-bottom" style="background:linear-gradient(45deg,#364EA2 10%,#368391 72%,#90C685 100%)">Sua energia é uma decisão estratégica. Trate como uma.</div>
+    </div>
+    <div class="slide" data-glow="#2E8FD0">
+      <div class="bg"></div>
+      <div class="pill-top">Liven Com</div>
+      <div class="pill-bottom" style="background:#2379B5">Comprar e vender energia bem é ter inteligência de mercado do seu lado.</div>
+    </div>
+    <div class="slide" data-glow="#5E9A52">
+      <div class="bg"></div>
+      <div class="pill-top">Liven GD</div>
+      <div class="pill-bottom" style="background:#4E8A43">Energia limpa e mais barata, sem instalar uma única placa.</div>
+    </div>
+    <div class="slide" data-glow="#377F8F">
+      <div class="bg"></div>
+      <div class="pill-top">Liven BESS</div>
+      <div class="pill-bottom" style="background:#2A6674">Guarde energia quando ela é barata. Use quando ela vale ouro.</div>
+    </div>
+    <div class="slide" data-glow="#F2202A">
+      <div class="bg"></div>
+      <div class="pill-top">Liven Gás</div>
+      <div class="pill-bottom" style="background:#E30613">Consultoria e gestão estratégica no mercado livre de gás natural.</div>
+    </div>
+    <div class="dots" id="dots"></div>
+  </div>
+
+</div></div>
+
+<script>
+  var INTERVALO = 4500; // ms por slide
+  var slides = document.querySelectorAll('.slide');
+  var dots = document.getElementById('dots');
+  var atual = 0, timer;
+
+  slides.forEach(function (s, i) {
+    var g = s.dataset.glow;
+    s.querySelector('.bg').style.background =
+      'radial-gradient(ellipse at 20% 85%,' + g + '66 0%,rgba(6,17,83,0) 60%),' +
+      'radial-gradient(ellipse at 90% 10%,' + g + '33 0%,rgba(6,17,83,0) 55%),#061153';
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.setAttribute('aria-label', s.querySelector('.pill-top').textContent);
+    b.onclick = function () { ir(i); iniciar(); };
+    dots.appendChild(b);
+  });
+
+  function ir(n) {
+    atual = n;
+    slides.forEach(function (s, i) {
+      s.classList.toggle('on', i === n);
+      s.querySelector('.bg').classList.toggle('on', i === n);
+    });
+    dots.childNodes.forEach(function (d, i) { d.classList.toggle('on', i === n); });
+  }
+  function iniciar() {
+    clearInterval(timer);
+    timer = setInterval(function () { ir((atual + 1) % slides.length); }, INTERVALO);
+  }
+  ir(0); iniciar();
+</script>
+</body>
+</html>
