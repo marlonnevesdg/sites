@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Login Liven</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;600;700;800&display=swap">
+<style>
+body{margin:0;background:#222326;font-family:'Mulish',sans-serif}
+a{color:#2563c9}a:hover{color:#3A3F80}
+input::placeholder{color:#6b6f7e}
+input:focus{outline:2px solid #3A3F80;outline-offset:1px}
+button:focus-visible{outline:2px solid #3A3F80;outline-offset:2px}
+</style>
+</helmet>
+<div style="min-height: 100vh; box-sizing: border-box; padding: 24px; display: flex; align-items: center; justify-content: center">
+<div style="width: 100%; max-width: 1280px; box-sizing: border-box; background: #ffffff; border-radius: 40px; padding: 12px; display: flex; flex-wrap: wrap; gap: 12px">
+
+<div style="flex: 1 1 380px; min-width: 0; box-sizing: border-box; padding: 48px 32px; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 640px">
+<div style="width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px">
+<svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#3A3F80" stroke-width="5" stroke-linecap="round" aria-hidden="true"><path d="M14 6c-6 8-6 22 2 28 6 4 14 2 14-4s-8-6-10-2" /><circle cx="33" cy="30" r="3" stroke="#4fb9a0"/></svg>
+<span style="font-size: 38px; font-weight: 800; letter-spacing: 1px; color: #3A3F80">liven</span>
+</div>
+<h1 style="margin: 0; font-size: 32px; font-weight: 800; color: #1c1d24">Bem-vindo</h1>
+<p style="margin: -12px 0 0; font-size: 15px; color: #5a5e6e">Acesse sua conta Liven Infinity.</p>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<label for="user" style="font-size: 14px; font-weight: 700; color: #1c1d24">Login ou E-mail</label>
+<input id="user" type="text" placeholder="seu@email.com.br" style="height: 54px; box-sizing: border-box; border: 1px solid #e3e4ea; background: #f6f6f8; border-radius: 14px; padding: 0 18px; font-size: 15px; font-family: inherit; color: #1c1d24">
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<label for="pass" style="font-size: 14px; font-weight: 700; color: #1c1d24">Senha</label>
+<input id="pass" type="password" placeholder="Digite sua senha" style="height: 54px; box-sizing: border-box; border: 1px solid #e3e4ea; background: #f6f6f8; border-radius: 14px; padding: 0 18px; font-size: 15px; font-family: inherit; color: #1c1d24">
+</div>
+<a href="#" style="display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; text-decoration: none; min-height: 44px">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.5" r="1.5"/></svg>
+Esqueci minha senha</a>
+<button type="button" style="height: 56px; border: 0; border-radius: 14px; background: #3A3F80; color: #ffffff; font-size: 16px; font-weight: 700; font-family: inherit; cursor: pointer">Login</button>
+</div>
+</div>
+
+<div style="flex: 1.15 1 420px; min-width: 0; position: relative; overflow: hidden; border-radius: 30px; min-height: 640px; background: #061153">
+<div style="position: absolute; inset: 0; background: radial-gradient(ellipse at 20% 85%, #36839166 0%, rgba(6,17,83,0) 60%), radial-gradient(ellipse at 90% 10%, #36839133 0%, rgba(6,17,83,0) 55%), #061153; opacity: {{bg0}}; transition: opacity 900ms ease"></div>
+<div style="position: absolute; inset: 0; background: radial-gradient(ellipse at 20% 85%, #36839166 0%, rgba(6,17,83,0) 60%), radial-gradient(ellipse at 90% 10%, #36839133 0%, rgba(6,17,83,0) 55%), #061153; opacity: {{bg1}}; transition: opacity 900ms ease"></div>
+<div style="position: absolute; inset: 0; background: radial-gradient(ellipse at 20% 85%, #2E8FD066 0%, rgba(6,17,83,0) 60%), radial-gradient(ellipse at 90% 10%, #2E8FD033 0%, rgba(6,17,83,0) 55%), #061153; opacity: {{bg2}}; transition: opacity 900ms ease"></div>
+<div style="position: absolute; inset: 0; background: radial-gradient(ellipse at 20% 85%, #5E9A5266 0%, rgba(6,17,83,0) 60%), radial-gradient(ellipse at 90% 10%, #5E9A5233 0%, rgba(6,17,83,0) 55%), #061153; opacity: {{bg3}}; transition: opacity 900ms ease"></div>
+<div style="position: absolute; inset: 0; background: radial-gradient(ellipse at 20% 85%, #377F8F66 0%, rgba(6,17,83,0) 60%), radial-gradient(ellipse at 90% 10%, #377F8F33 0%, rgba(6,17,83,0) 55%), #061153; opacity: {{bg4}}; transition: opacity 900ms ease"></div>
+<div style="position: absolute; inset: 0; background: radial-gradient(ellipse at 20% 85%, #F2202A66 0%, rgba(6,17,83,0) 60%), radial-gradient(ellipse at 90% 10%, #F2202A33 0%, rgba(6,17,83,0) 55%), #061153; opacity: {{bg5}}; transition: opacity 900ms ease"></div>
+<div style="position: absolute; top: 30%; left: 0; width: 46%; height: 64px; box-sizing: border-box; display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding-right: 9%; background: #18287A; border-radius: 0 999px 999px 0; color: #FFFFFF; transform: translateX({{x0}}); transition: transform 900ms cubic-bezier(.22,.8,.2,1) {{d1_0}}">
+<svg width="22" height="22" viewBox="0 0 44 44" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" aria-hidden="true"><path d="M14 6c-6 8-6 22 2 28 6 4 14 2 14-4s-8-6-10-2"/><circle cx="33" cy="30" r="3" stroke="#7fe0c4"/></svg>
+<span style="font-size: 15px; font-weight: 800; color: #FFFFFF">One-Stop-Shop</span>
+</div>
+<div style="position: absolute; top: calc(30% + 84px); left: 34%; right: 0; box-sizing: border-box; min-height: 64px; display: flex; align-items: center; padding: 16px 8% 16px 11%; background: linear-gradient(45deg,#364EA2 10%,#368391 72%,#90C685 100%); border-radius: 999px 0 0 999px; color: #FFFFFF; font-size: 15px; font-weight: 700; line-height: 1.35; transform: translateX({{x0}}); transition: transform 900ms cubic-bezier(.22,.8,.2,1) {{d2_0}}">Conceito multisserviços: toda a sua energia em um só lugar.</div>
+<div style="position: absolute; top: 30%; left: 0; width: 66%; height: 112px; box-sizing: border-box; display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding-right: 9%; background: #18287A; border-radius: 0 999px 999px 0; color: #FFFFFF; transform: translateX({{x1}}); transition: transform 900ms cubic-bezier(.22,.8,.2,1) {{d1_1}}">
+<svg width="36" height="36" viewBox="0 0 44 44" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" aria-hidden="true"><path d="M14 6c-6 8-6 22 2 28 6 4 14 2 14-4s-8-6-10-2"/><circle cx="33" cy="30" r="3" stroke="#7fe0c4"/></svg>
+<span style="font-size: 26px; font-weight: 800; color: #FFFFFF">Liven Gestora</span>
+</div>
+<div style="position: absolute; top: calc(30% + 132px); left: 34%; right: 0; box-sizing: border-box; min-height: 112px; display: flex; align-items: center; padding: 16px 8% 16px 11%; background: linear-gradient(45deg,#364EA2 10%,#368391 72%,#90C685 100%); border-radius: 999px 0 0 999px; color: #FFFFFF; font-size: 18px; font-weight: 700; line-height: 1.35; transform: translateX({{x1}}); transition: transform 900ms cubic-bezier(.22,.8,.2,1) {{d2_1}}">Sua energia é uma decisão estratégica. Trate como uma.</div>
+<div style="position: absolute; top: 30%; left: 0; width: 66%; height: 112px; box-sizing: border-box; display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding-right: 9%; background: #18287A; border-radius: 0 999px 999px 0; color: #FFFFFF; transform: translateX({{x2}}); transition: transform 900ms cubic-bezier(.22,.8,.2,1) {{d1_2}}">
+<svg width="36" height="36" viewBox="0 0 44 44" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" aria-hidden="true"><path d="M14 6c-6 8-6 22 2 28 6 4 14 2 14-4s-8-6-10-2"/><circle cx="33" cy="30" r="3" stroke="#7fe0c4"/></svg>
+<span style="font-size: 26px; font-weight: 800; color: #FFFFFF">Liven Com</span>
+</div>
+<div style="position: absolute; top: calc(30% + 132px); left: 34%; right: 0; box-sizing: border-box; min-height: 112px; display: flex; align-items: center; padding: 16px 8% 16px 11%; background: #2379B5; border-radius: 999px 0 0 999px; color: #FFFFFF; font-size: 18px; font-weight: 700; line-height: 1.35; transform: translateX({{x2}}); transition: transform 900ms cubic-bezier(.22,.8,.2,1) {{d2_2}}">Comprar e vender energia bem é ter inteligência de mercado do seu lado.</div>
+<div style="position: absolute; top: 30%; left: 0; width: 66%; height: 112px; box-sizing: border-box; display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding-right: 9%; background: #18287A; border-radius: 0 999px 999px 0; color: #FFFFFF; transform: translateX({{x3}}); transition: transform 900ms cubic-bezier(.22,.8,.2,1) {{d1_3}}">
+<svg width="36" height="36" viewBox="0 0 44 44" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" aria-hidden="true"><path d="M14 6c-6 8-6 22 2 28 6 4 14 2 14-4s-8-6-10-2"/><circle cx="33" cy="30" r="3" stroke="#7fe0c4"/></svg>
+<span style="font-size: 26px; font-weight: 800; color: #FFFFFF">Liven GD</span>
+</div>
+<div style="position: absolute; top: calc(30% + 132px); left: 34%; right: 0; box-sizing: border-box; min-height: 112px; display: flex; align-items: center; padding: 16px 8% 16px 11%; background: #4E8A43; border-radius: 999px 0 0 999px; color: #FFFFFF; font-size: 18px; font-weight: 700; line-height: 1.35; transform: translateX({{x3}}); transition: transform 900ms cubic-bezier(.22,.8,.2,1) {{d2_3}}">Energia limpa e mais barata, sem instalar uma única placa.</div>
+<div style="position: absolute; top: 30%; left: 0; width: 66%; height: 112px; box-sizing: border-box; display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding-right: 9%; background: #18287A; border-radius: 0 999px 999px 0; color: #FFFFFF; transform: translateX({{x4}}); transition: transform 900ms cubic-bezier(.22,.8,.2,1) {{d1_4}}">
+<svg width="36" height="36" viewBox="0 0 44 44" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" aria-hidden="true"><path d="M14 6c-6 8-6 22 2 28 6 4 14 2 14-4s-8-6-10-2"/><circle cx="33" cy="30" r="3" stroke="#7fe0c4"/></svg>
+<span style="font-size: 26px; font-weight: 800; color: #FFFFFF">Liven BESS</span>
+</div>
+<div style="position: absolute; top: calc(30% + 132px); left: 34%; right: 0; box-sizing: border-box; min-height: 112px; display: flex; align-items: center; padding: 16px 8% 16px 11%; background: #2A6674; border-radius: 999px 0 0 999px; color: #FFFFFF; font-size: 18px; font-weight: 700; line-height: 1.35; transform: translateX({{x4}}); transition: transform 900ms cubic-bezier(.22,.8,.2,1) {{d2_4}}">Guarde energia quando ela é barata. Use quando ela vale ouro.</div>
+<div style="position: absolute; top: 30%; left: 0; width: 66%; height: 112px; box-sizing: border-box; display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding-right: 9%; background: #18287A; border-radius: 0 999px 999px 0; color: #FFFFFF; transform: translateX({{x5}}); transition: transform 900ms cubic-bezier(.22,.8,.2,1) {{d1_5}}">
+<svg width="36" height="36" viewBox="0 0 44 44" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" aria-hidden="true"><path d="M14 6c-6 8-6 22 2 28 6 4 14 2 14-4s-8-6-10-2"/><circle cx="33" cy="30" r="3" stroke="#7fe0c4"/></svg>
+<span style="font-size: 26px; font-weight: 800; color: #FFFFFF">Liven Gás</span>
+</div>
+<div style="position: absolute; top: calc(30% + 132px); left: 34%; right: 0; box-sizing: border-box; min-height: 112px; display: flex; align-items: center; padding: 16px 8% 16px 11%; background: #E30613; border-radius: 999px 0 0 999px; color: #FFFFFF; font-size: 18px; font-weight: 700; line-height: 1.35; transform: translateX({{x5}}); transition: transform 900ms cubic-bezier(.22,.8,.2,1) {{d2_5}}">Consultoria e gestão estratégica no mercado livre de gás natural.</div>
+<div style="position: absolute; left: 0; right: 0; bottom: 32px; display: flex; justify-content: center; gap: 8px">
+<button type="button" aria-label="One-Stop-Shop" onClick="{{go0}}" style="height: 8px; width: {{dw0}}; border: 0; padding: 0; border-radius: 999px; background: #FFFFFF; opacity: {{do0}}; cursor: pointer; transition: all 400ms ease"></button>
+<button type="button" aria-label="Liven Gestora" onClick="{{go1}}" style="height: 8px; width: {{dw1}}; border: 0; padding: 0; border-radius: 999px; background: #FFFFFF; opacity: {{do1}}; cursor: pointer; transition: all 400ms ease"></button>
+<button type="button" aria-label="Liven Com" onClick="{{go2}}" style="height: 8px; width: {{dw2}}; border: 0; padding: 0; border-radius: 999px; background: #FFFFFF; opacity: {{do2}}; cursor: pointer; transition: all 400ms ease"></button>
+<button type="button" aria-label="Liven GD" onClick="{{go3}}" style="height: 8px; width: {{dw3}}; border: 0; padding: 0; border-radius: 999px; background: #FFFFFF; opacity: {{do3}}; cursor: pointer; transition: all 400ms ease"></button>
+<button type="button" aria-label="Liven BESS" onClick="{{go4}}" style="height: 8px; width: {{dw4}}; border: 0; padding: 0; border-radius: 999px; background: #FFFFFF; opacity: {{do4}}; cursor: pointer; transition: all 400ms ease"></button>
+<button type="button" aria-label="Liven Gás" onClick="{{go5}}" style="height: 8px; width: {{dw5}}; border: 0; padding: 0; border-radius: 999px; background: #FFFFFF; opacity: {{do5}}; cursor: pointer; transition: all 400ms ease"></button>
+</div>
+</div>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"interval":{"editor":"int","default":4500,"min":2000,"max":10000,"step":500,"unit":"ms"},"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { i: 0 };
+    this.n = 6;
+  }
+  componentDidMount() { this.start(); }
+  componentWillUnmount() { clearInterval(this.timer); }
+  start() {
+    clearInterval(this.timer);
+    this.timer = setInterval(() => {
+      this.setState({ i: (this.state.i + 1) % this.slidesData.length });
+    }, this.props.interval ?? 4500);
+  }
+  renderVals() {
+    const cur = this.state.i, v = {};
+    for (let i = 0; i < this.n; i++) {
+      const on = i === cur;
+      v['bg' + i] = on ? 1 : 0;
+      v['x' + i] = on ? '0' : '-125%';
+      v['d1_' + i] = on ? '150ms' : '0ms';
+      v['d2_' + i] = on ? '350ms' : '0ms';
+      v['dw' + i] = on ? '28px' : '8px';
+      v['do' + i] = on ? 1 : 0.45;
+      v['go' + i] = () => { this.setState({ i }); this.start(); };
+    }
+    return v;
+  }
+}
+</script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;600;700;800&display=swap">
+<style>
+body{margin:0;background:#222326;font-family:'Mulish',sans-serif}
+a{color:#2563c9}a:hover{color:#3A3F80}
+input::placeholder{color:#6b6f7e}
+input:focus{outline:2px solid #3A3F80;outline-offset:1px}
+button:focus-visible{outline:2px solid #3A3F80;outline-offset:2px}
+</style>
+</helmet>
+<div style="min-height: 100vh; box-sizing: border-box; padding: 24px; display: flex; align-items: center; justify-content: center">
+<div style="width: 100%; max-width: 1280px; box-sizing: border-box; background: #ffffff; border-radius: 40px; padding: 12px; display: flex; flex-wrap: wrap; gap: 12px">
+
+<div style="flex: 1 1 380px; min-width: 0; box-sizing: border-box; padding: 48px 32px; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 640px">
+<div style="width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px">
+<svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#3A3F80" stroke-width="5" stroke-linecap="round" aria-hidden="true"><path d="M14 6c-6 8-6 22 2 28 6 4 14 2 14-4s-8-6-10-2" /><circle cx="33" cy="30" r="3" stroke="#4fb9a0"/></svg>
+<span style="font-size: 38px; font-weight: 800; letter-spacing: 1px; color: #3A3F80">liven</span>
+</div>
+<h1 style="margin: 0; font-size: 32px; font-weight: 800; color: #1c1d24">Bem-vindo</h1>
+<p style="margin: -12px 0 0; font-size: 15px; color: #5a5e6e">Acesse sua conta Liven Infinity.</p>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<label for="user" style="font-size: 14px; font-weight: 700; color: #1c1d24">Login ou E-mail</label>
+<input id="user" type="text" placeholder="seu@email.com.br" style="height: 54px; box-sizing: border-box; border: 1px solid #e3e4ea; background: #f6f6f8; border-radius: 14px; padding: 0 18px; font-size: 15px; font-family: inherit; color: #1c1d24">
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<label for="pass" style="font-size: 14px; font-weight: 700; color: #1c1d24">Senha</label>
+<input id="pass" type="password" placeholder="Digite sua senha" style="height: 54px; box-sizing: border-box; border: 1px solid #e3e4ea; background: #f6f6f8; border-radius: 14px; padding: 0 18px; font-size: 15px; font-family: inherit; color: #1c1d24">
+</div>
+<a href="#" style="display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; text-decoration: none; min-height: 44px">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.5" r="1.5"/></svg>
+Esqueci minha senha</a>
+<button type="button" style="height: 56px; border: 0; border-radius: 14px; background: #3A3F80; color: #ffffff; font-size: 16px; font-weight: 700; font-family: inherit; cursor: pointer">Login</button>
+</div>
+</div>
+
+<div style="flex: 1.15 1 420px; min-width: 0; position: relative; overflow: hidden; border-radius: 30px; min-height: 640px; background: #061153">
+<div style="position: absolute; inset: 0; background: radial-gradient(ellipse at 20% 85%, #36839166 0%, rgba(6,17,83,0) 60%), radial-gradient(ellipse at 90% 10%, #36839133 0%, rgba(6,17,83,0) 55%), #061153; opacity: {{bg0}}; transition: opacity 900ms ease"></div>
+<div style="position: absolute; inset: 0; background: radial-gradient(ellipse at 20% 85%, #36839166 0%, rgba(6,17,83,0) 60%), radial-gradient(ellipse at 90% 10%, #36839133 0%, rgba(6,17,83,0) 55%), #061153; opacity: {{bg1}}; transition: opacity 900ms ease"></div>
+<div style="position: absolute; inset: 0; background: radial-gradient(ellipse at 20% 85%, #2E8FD066 0%, rgba(6,17,83,0) 60%), radial-gradient(ellipse at 90% 10%, #2E8FD033 0%, rgba(6,17,83,0) 55%), #061153; opacity: {{bg2}}; transition: opacity 900ms ease"></div>
+<div style="position: absolute; inset: 0; background: radial-gradient(ellipse at 20% 85%, #5E9A5266 0%, rgba(6,17,83,0) 60%), radial-gradient(ellipse at 90% 10%, #5E9A5233 0%, rgba(6,17,83,0) 55%), #061153; opacity: {{bg3}}; transition: opacity 900ms ease"></div>
+<div style="position: absolute; inset: 0; background: radial-gradient(ellipse at 20% 85%, #377F8F66 0%, rgba(6,17,83,0) 60%), radial-gradient(ellipse at 90% 10%, #377F8F33 0%, rgba(6,17,83,0) 55%), #061153; opacity: {{bg4}}; transition: opacity 900ms ease"></div>
+<div style="position: absolute; inset: 0; background: radial-gradient(ellipse at 20% 85%, #F2202A66 0%, rgba(6,17,83,0) 60%), radial-gradient(ellipse at 90% 10%, #F2202A33 0%, rgba(6,17,83,0) 55%), #061153; opacity: {{bg5}}; transition: opacity 900ms ease"></div>
+<div style="position: absolute; top: 30%; left: 0; width: 46%; height: 64px; box-sizing: border-box; display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding-right: 9%; background: #18287A; border-radius: 0 999px 999px 0; color: #FFFFFF; transform: translateX({{x0}}); transition: transform 900ms cubic-bezier(.22,.8,.2,1) {{d1_0}}">
+<svg width="22" height="22" viewBox="0 0 44 44" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" aria-hidden="true"><path d="M14 6c-6 8-6 22 2 28 6 4 14 2 14-4s-8-6-10-2"/><circle cx="33" cy="30" r="3" stroke="#7fe0c4"/></svg>
+<span style="font-size: 15px; font-weight: 800; color: #FFFFFF">One-Stop-Shop</span>
+</div>
+<div style="position: absolute; top: calc(30% + 84px); left: 34%; right: 0; box-sizing: border-box; min-height: 64px; display: flex; align-items: center; padding: 16px 8% 16px 11%; background: linear-gradient(45deg,#364EA2 10%,#368391 72%,#90C685 100%); border-radius: 999px 0 0 999px; color: #FFFFFF; font-size: 15px; font-weight: 700; line-height: 1.35; transform: translateX({{x0}}); transition: transform 900ms cubic-bezier(.22,.8,.2,1) {{d2_0}}">Conceito multisserviços: toda a sua energia em um só lugar.</div>
+<div style="position: absolute; top: 30%; left: 0; width: 66%; height: 112px; box-sizing: border-box; display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding-right: 9%; background: #18287A; border-radius: 0 999px 999px 0; color: #FFFFFF; transform: translateX({{x1}}); transition: transform 900ms cubic-bezier(.22,.8,.2,1) {{d1_1}}">
+<svg width="36" height="36" viewBox="0 0 44 44" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" aria-hidden="true"><path d="M14 6c-6 8-6 22 2 28 6 4 14 2 14-4s-8-6-10-2"/><circle cx="33" cy="30" r="3" stroke="#7fe0c4"/></svg>
+<span style="font-size: 26px; font-weight: 800; color: #FFFFFF">Liven Gestora</span>
+</div>
+<div style="position: absolute; top: calc(30% + 132px); left: 34%; right: 0; box-sizing: border-box; min-height: 112px; display: flex; align-items: center; padding: 16px 8% 16px 11%; background: linear-gradient(45deg,#364EA2 10%,#368391 72%,#90C685 100%); border-radius: 999px 0 0 999px; color: #FFFFFF; font-size: 18px; font-weight: 700; line-height: 1.35; transform: translateX({{x1}}); transition: transform 900ms cubic-bezier(.22,.8,.2,1) {{d2_1}}">Sua energia é uma decisão estratégica. Trate como uma.</div>
+<div style="position: absolute; top: 30%; left: 0; width: 66%; height: 112px; box-sizing: border-box; display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding-right: 9%; background: #18287A; border-radius: 0 999px 999px 0; color: #FFFFFF; transform: translateX({{x2}}); transition: transform 900ms cubic-bezier(.22,.8,.2,1) {{d1_2}}">
+<svg width="36" height="36" viewBox="0 0 44 44" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" aria-hidden="true"><path d="M14 6c-6 8-6 22 2 28 6 4 14 2 14-4s-8-6-10-2"/><circle cx="33" cy="30" r="3" stroke="#7fe0c4"/></svg>
+<span style="font-size: 26px; font-weight: 800; color: #FFFFFF">Liven Com</span>
+</div>
+<div style="position: absolute; top: calc(30% + 132px); left: 34%; right: 0; box-sizing: border-box; min-height: 112px; display: flex; align-items: center; padding: 16px 8% 16px 11%; background: #2379B5; border-radius: 999px 0 0 999px; color: #FFFFFF; font-size: 18px; font-weight: 700; line-height: 1.35; transform: translateX({{x2}}); transition: transform 900ms cubic-bezier(.22,.8,.2,1) {{d2_2}}">Comprar e vender energia bem é ter inteligência de mercado do seu lado.</div>
+<div style="position: absolute; top: 30%; left: 0; width: 66%; height: 112px; box-sizing: border-box; display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding-right: 9%; background: #18287A; border-radius: 0 999px 999px 0; color: #FFFFFF; transform: translateX({{x3}}); transition: transform 900ms cubic-bezier(.22,.8,.2,1) {{d1_3}}">
+<svg width="36" height="36" viewBox="0 0 44 44" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" aria-hidden="true"><path d="M14 6c-6 8-6 22 2 28 6 4 14 2 14-4s-8-6-10-2"/><circle cx="33" cy="30" r="3" stroke="#7fe0c4"/></svg>
+<span style="font-size: 26px; font-weight: 800; color: #FFFFFF">Liven GD</span>
+</div>
+<div style="position: absolute; top: calc(30% + 132px); left: 34%; right: 0; box-sizing: border-box; min-height: 112px; display: flex; align-items: center; padding: 16px 8% 16px 11%; background: #4E8A43; border-radius: 999px 0 0 999px; color: #FFFFFF; font-size: 18px; font-weight: 700; line-height: 1.35; transform: translateX({{x3}}); transition: transform 900ms cubic-bezier(.22,.8,.2,1) {{d2_3}}">Energia limpa e mais barata, sem instalar uma única placa.</div>
+<div style="position: absolute; top: 30%; left: 0; width: 66%; height: 112px; box-sizing: border-box; display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding-right: 9%; background: #18287A; border-radius: 0 999px 999px 0; color: #FFFFFF; transform: translateX({{x4}}); transition: transform 900ms cubic-bezier(.22,.8,.2,1) {{d1_4}}">
+<svg width="36" height="36" viewBox="0 0 44 44" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" aria-hidden="true"><path d="M14 6c-6 8-6 22 2 28 6 4 14 2 14-4s-8-6-10-2"/><circle cx="33" cy="30" r="3" stroke="#7fe0c4"/></svg>
+<span style="font-size: 26px; font-weight: 800; color: #FFFFFF">Liven BESS</span>
+</div>
+<div style="position: absolute; top: calc(30% + 132px); left: 34%; right: 0; box-sizing: border-box; min-height: 112px; display: flex; align-items: center; padding: 16px 8% 16px 11%; background: #2A6674; border-radius: 999px 0 0 999px; color: #FFFFFF; font-size: 18px; font-weight: 700; line-height: 1.35; transform: translateX({{x4}}); transition: transform 900ms cubic-bezier(.22,.8,.2,1) {{d2_4}}">Guarde energia quando ela é barata. Use quando ela vale ouro.</div>
+<div style="position: absolute; top: 30%; left: 0; width: 66%; height: 112px; box-sizing: border-box; display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding-right: 9%; background: #18287A; border-radius: 0 999px 999px 0; color: #FFFFFF; transform: translateX({{x5}}); transition: transform 900ms cubic-bezier(.22,.8,.2,1) {{d1_5}}">
+<svg width="36" height="36" viewBox="0 0 44 44" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" aria-hidden="true"><path d="M14 6c-6 8-6 22 2 28 6 4 14 2 14-4s-8-6-10-2"/><circle cx="33" cy="30" r="3" stroke="#7fe0c4"/></svg>
+<span style="font-size: 26px; font-weight: 800; color: #FFFFFF">Liven Gás</span>
+</div>
+<div style="position: absolute; top: calc(30% + 132px); left: 34%; right: 0; box-sizing: border-box; min-height: 112px; display: flex; align-items: center; padding: 16px 8% 16px 11%; background: #E30613; border-radius: 999px 0 0 999px; color: #FFFFFF; font-size: 18px; font-weight: 700; line-height: 1.35; transform: translateX({{x5}}); transition: transform 900ms cubic-bezier(.22,.8,.2,1) {{d2_5}}">Consultoria e gestão estratégica no mercado livre de gás natural.</div>
+<div style="position: absolute; left: 0; right: 0; bottom: 32px; display: flex; justify-content: center; gap: 8px">
+<button type="button" aria-label="One-Stop-Shop" onClick="{{go0}}" style="height: 8px; width: {{dw0}}; border: 0; padding: 0; border-radius: 999px; background: #FFFFFF; opacity: {{do0}}; cursor: pointer; transition: all 400ms ease"></button>
+<button type="button" aria-label="Liven Gestora" onClick="{{go1}}" style="height: 8px; width: {{dw1}}; border: 0; padding: 0; border-radius: 999px; background: #FFFFFF; opacity: {{do1}}; cursor: pointer; transition: all 400ms ease"></button>
+<button type="button" aria-label="Liven Com" onClick="{{go2}}" style="height: 8px; width: {{dw2}}; border: 0; padding: 0; border-radius: 999px; background: #FFFFFF; opacity: {{do2}}; cursor: pointer; transition: all 400ms ease"></button>
+<button type="button" aria-label="Liven GD" onClick="{{go3}}" style="height: 8px; width: {{dw3}}; border: 0; padding: 0; border-radius: 999px; background: #FFFFFF; opacity: {{do3}}; cursor: pointer; transition: all 400ms ease"></button>
+<button type="button" aria-label="Liven BESS" onClick="{{go4}}" style="height: 8px; width: {{dw4}}; border: 0; padding: 0; border-radius: 999px; background: #FFFFFF; opacity: {{do4}}; cursor: pointer; transition: all 400ms ease"></button>
+<button type="button" aria-label="Liven Gás" onClick="{{go5}}" style="height: 8px; width: {{dw5}}; border: 0; padding: 0; border-radius: 999px; background: #FFFFFF; opacity: {{do5}}; cursor: pointer; transition: all 400ms ease"></button>
+</div>
+</div>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"interval":{"editor":"int","default":4500,"min":2000,"max":10000,"step":500,"unit":"ms"},"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { i: 0 };
+    this.n = 6;
+  }
+  componentDidMount() { this.start(); }
+  componentWillUnmount() { clearInterval(this.timer); }
+  start() {
+    clearInterval(this.timer);
+    this.timer = setInterval(() => {
+      this.setState({ i: (this.state.i + 1) % this.slidesData.length });
+    }, this.props.interval ?? 4500);
+  }
+  renderVals() {
+    const cur = this.state.i;
+    const slides = this.slidesData.map((d, idx) => {
+      const on = idx === cur;
+      const prev = idx === (cur + this.slidesData.length - 1) % this.slidesData.length;
+      const tx = on ? 'translateX(0)' : 'translateX(-125%)';
+      const tr = 'transform 900ms cubic-bezier(.22,.8,.2,1)';
+      const base = 'position:absolute;left:0;right:0;pointer-events:none;';
+      return {
+        name: d.name, phrase: d.phrase,
+        iconSize: d.small ? 22 : 36,
+        bgStyle: 'position:absolute;inset:0;opacity:' + (on ? 1 : 0) + ';transition:opacity 900ms ease;background:radial-gradient(ellipse at 20% 85%,' + d.glow + '66 0%,rgba(6,17,83,0) 60%),radial-gradient(ellipse at 90% 10%,' + d.glow + '33 0%,rgba(6,17,83,0) 55%),#061153',
+        topStyle: 'position:absolute;top:30%;left:0;width:' + (d.small ? '46%' : '66%') + ';height:' + (d.small ? '64px' : '112px') + ';transform:' + tx + ';transition:' + tr + (on ? ' 150ms' : '') + ';',
+        logoStyle: 'width:100%;height:100%;box-sizing:border-box;display:flex;align-items:center;justify-content:flex-end;gap:' + (d.small ? 8 : 12) + 'px;padding-right:9%;background:#18287A;border-radius:0 999px 999px 0;color:#fff',
+        nameStyle: 'font-weight:800;color:#fff;letter-spacing:.3px;font-size:' + (d.small ? 15 : 26) + 'px',
+        bottomStyle: 'position:absolute;top:calc(30% + ' + (d.small ? 84 : 132) + 'px);left:34%;right:0;box-sizing:border-box;min-height:' + (d.small ? 64 : 112) + 'px;display:flex;align-items:center;padding:16px 8% 16px 11%;background:' + d.fill + ';border-radius:999px 0 0 999px;color:#fff;font-size:' + (d.small ? 15 : 18) + 'px;font-weight:700;line-height:1.35;transform:' + tx + ';transition:' + tr + (on ? ' 350ms' : '') + ';pointer-events:none',
+        dotStyle: 'height:8px;border:0;padding:0;border-radius:999px;cursor:pointer;background:#fff;opacity:' + (on ? 1 : 0.45) + ';width:' + (on ? 28 : 8) + 'px;transition:all 400ms ease',
+        go: () => { this.setState({ i: idx }); this.start(); }
+      };
+    });
+    return { slides };
+  }
+}
+</script>
+</body>
+</html>
